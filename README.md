@@ -3,7 +3,25 @@
 ## 1. Context
 This repository documents my study of reinforcement learning from human feedback (RLHF) as preparation for a doctoral pathway. The project addresses the alignment of large language models (LLMs) with external feedback through reinforcement-learning-based methods, with particular attention to (i) the robustness of alignment procedures, (ii) multi-objective alignment across potentially conflicting feedback signals, and (iii) statistical perspectives on policy optimization. 
 
-## 2. Learning Resources
+## 2. Repository Map
+
+Supporting coursework and project material with mini prototype:
+
+```
+docs/
+├── projects/          PPO implementation notes and presentation (prior hands-on RL work)
+├── courses/
+│   ├── ai-introduction/   Search, logic, knowledge representation, KNN, Naive Bayes
+│   └── deep-learning/     Neural network foundations
+└── math/
+    ├── algebra/           Linear algebra foundations
+    └── probabilistics/    Probability foundations for statistical RL
+src/
+├── rl-foundations/    Bandits, tabular Q-learning, REINFORCE (mini prototypes)
+└── deep-learning/     Backprop, MLP, from-scratch mini-GPT (mini prototypes)
+```
+
+## 3. Learning Resources
 
 Video/course material used alongside coursework and papers, grouped to match the repository map below.
 
@@ -27,25 +45,7 @@ Video/course material used alongside coursework and papers, grouped to match the
 - [CleanRL — PPO implementation reference](https://docs.cleanrl.dev/rl-algorithms/ppo/) — single-file implementation style used for prototypes.
 - [Hugging Face — A Guide to RL Post-Training for LLMs: PPO, DPO, GRPO, and Beyond](https://huggingface.co/blog/karina-zadorozhny/guide-to-llm-post-training-algorithms) — written comparison of the three algorithms above.
 
-## 5. Repository Map
-
-Supporting coursework and project material with mini prototype:
-
-```
-docs/
-├── projects/          PPO implementation notes and presentation (prior hands-on RL work)
-├── courses/
-│   ├── ai-introduction/   Search, logic, knowledge representation, KNN, Naive Bayes
-│   └── deep-learning/     Neural network foundations
-└── math/
-    ├── algebra/           Linear algebra foundations
-    └── probabilistics/    Probability foundations for statistical RL
-src/
-├── rl-foundations/    Bandits, tabular Q-learning, REINFORCE (mini prototypes)
-└── deep-learning/     Backprop, MLP, from-scratch mini-GPT (mini prototypes)
-```
-
-## References
+## 4. References
 
 1. Schulman, J., Wolski, F., Dhariwal, P., Radford, A., & Klimov, O. (2017). Proximal Policy Optimization Algorithms. *arXiv:1707.06347*.
 2. Rafailov, R., Sharma, A., Mitchell, E., Ermon, S., Manning, C. D., & Finn, C. (2023). Direct Preference Optimization: Your Language Model is Secretly a Reward Model. *arXiv:2305.18290*.
