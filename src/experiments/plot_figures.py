@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Generate the evaluation figures of the certified admission gate.
 
-All data loaded from CSV reports in results/ (written by run_experiments.py and
+All data loaded from CSV reports in results/ (written by benchmark_gate.py and
 validation/panco_check.py).
 """
 
@@ -105,8 +105,6 @@ for ax, topo in zip(axes, TOPOLOGIES):
     ax.set_title(TOPO_LABEL[topo])
     ax.grid(True, alpha=0.3, axis="y", linestyle="--")
 axes[0].set_ylabel("Admission time per request (µs, log)")
-fig.text(0.5, -0.02, f"{len(seeds)} seeds × 1,000 requests per box; whiskers 1.5 IQR, outliers hidden.",
-         ha="center", fontsize=8, color="gray")
 fig.tight_layout()
 save(fig, "admission_latency")
 
@@ -225,9 +223,6 @@ ax2.set_xlabel("Observed / bound")
 ax2.set_ylabel("Fraction of flows (CDF)")
 ax2.set_title("(b) Tightness")
 ax2.grid(True, alpha=0.3, linestyle="--")
-fig.text(0.5, -0.02, f"{len(sim_rows)} admitted flows, line and tree, {len(seeds)} seeds, "
-         f"10 ms simulated; {n_viol} bound violations. The simulator does not force the worst case.",
-         ha="center", fontsize=8, color="gray")
 fig.tight_layout()
 save(fig, "bound_tightness")
 
@@ -272,8 +267,6 @@ if panels:
         ax.set_title(title)
         ax.legend(fontsize=7.5, loc="upper left", framealpha=0.9)
         ax.grid(True, alpha=0.3, linestyle="--")
-    fig.text(0.5, -0.02, "panco commit f035ccc5; e2e values from lp_solve are printed to 6 significant digits.",
-             ha="center", fontsize=8, color="gray")
     fig.tight_layout()
     save(fig, "panco_agreement")
 

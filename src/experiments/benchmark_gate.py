@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Run the gate experiments and write raw CSVs to results/.
+"""
+Benchmark the admission gate (speed, admission rate, bound safety).
 
 E1  requests.csv    One row per admission request: 1,000 seeded requests per run,
                     line and tree topologies, full and incremental gates, SEEDS seeds.

@@ -27,7 +27,7 @@ $B_H, R_H$: aggregate burst and rate of higher-priority flows; $L_{lo}$: largest
 │   ├── tsn_gate/        # model, NP-SP analysis, full/incremental gates, certificate checker, simulator
 │   ├── tests/           # hand calculation, full = incremental, tampered certificates, simulation
 │   ├── validation/      # cross-check against panco
-│   ├── experiments/     # run_experiments.py, plot_figures.py
+│   ├── experiments/     # benchmark_gate.py, plot_figures.py
 │   ├── results/         # raw CSVs
 │   └── figures/         # PNG/PDF
 └── docs/                # thesis offer, courses, math background
@@ -39,7 +39,7 @@ $B_H, R_H$: aggregate burst and rate of higher-priority flows; $L_{lo}$: largest
 cd src
 pip install -r requirements.txt
 python -m pytest -q                        # tests
-python experiments/run_experiments.py      # -> results/*.csv
+python experiments/benchmark_gate.py       # -> results/*.csv
 python experiments/plot_figures.py         # -> figures/*.{png,pdf}
 
 # optional: panco cross-check 
