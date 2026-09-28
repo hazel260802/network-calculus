@@ -1,0 +1,5 @@
+pytest>=8
+# validation only (reference tool, not on PyPI; pin the commit used):
+#   git clone https://github.com/anne-bou/panco && git -C panco checkout f035ccc5c388bad50a223f65f324d29851802b12
+#   set PANCO_PATH to the clone. numpy is required by panco; lp_solve by `--mode e2e`.
+numpy

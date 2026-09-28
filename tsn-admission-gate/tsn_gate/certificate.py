@@ -50,9 +50,17 @@ class Certificate:
         return s
 
 
+def flow_hash(f) -> int:
+    key = repr((f.id, f.src, f.dst, f.b, f.r, f.L, f.prio, f.deadline)).encode()
+    return int.from_bytes(hashlib.sha256(key).digest()[:8], "big")
+
+
 def digest(flows) -> str:
-    items = sorted((f.id, f.src, f.dst, f.b, f.r, f.L, f.prio, f.deadline) for f in flows)
-    return hashlib.sha256(repr(items).encode()).hexdigest()[:16]
+    """Fingerprint of an admitted set: XOR of flow hashes (order-free, O(1) to update)."""
+    h = 0
+    for f in flows:
+        h ^= flow_hash(f)
+    return f"{h:016x}"
 
 
 def make_witness(flow, path, bursts, port_results, e2e) -> FlowWitness:
@@ -69,9 +77,22 @@ def _ge(a: float, b: float) -> bool:
     return a >= b - REL_TOL * max(1.0, abs(a), abs(b))
 
 
-def check_certificate(net, witnesses: dict) -> tuple:
-    """Verify a COMPLETE acceptance witness set. Returns (ok, list of errors)."""
+def check_certificate(net, witnesses: dict, flows=None) -> tuple:
+    """Verify a COMPLETE acceptance witness set. Returns (ok, list of errors).
+
+    `flows` (fid -> Flow) is the operator's flow database. When given, the checker
+    also requires exactly one witness per admitted flow, carrying that flow's own
+    parameters (C0). Without it, a certificate that silently omits a flow would
+    still pass: removing a flow only makes the other aggregates over-estimates.
+    """
     err = []
+    if flows is not None:                                                      # C0
+        if set(witnesses) != set(flows):
+            err.append(f"witness set != admitted flows (missing "
+                       f"{sorted(set(flows) - set(witnesses))[:5]}, extra "
+                       f"{sorted(set(witnesses) - set(flows))[:5]})")
+        err += [f"flow {f}: witness parameters differ from the flow database"
+                for f in witnesses if f in flows and witnesses[f].flow != flows[f]]
     C, tp = net.C, net.t_proc
     at_port = {}
     for fid, w in witnesses.items():
