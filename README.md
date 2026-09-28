@@ -1,52 +1,36 @@
-# Research Notes: RLHF Alignment of Large Language Models
+# Certified Admission Control for TSN 
 
-## 1. Context
-This repository documents my study of reinforcement learning from human feedback (RLHF) as preparation for a doctoral pathway. The project addresses the alignment of large language models (LLMs) with external feedback through reinforcement-learning-based methods, with particular attention to (i) the robustness of alignment procedures, (ii) multi-objective alignment across potentially conflicting feedback signals, and (iii) statistical perspectives on policy optimization. 
+Preparation for the PhD **"Certified Dynamic Reconfiguration of Time-Sensitive Networks: Online Admission Control under Worst-Case Determinism Guarantees"**, LyRIDS (ECE) / CEDRIC (Cnam). Offer: [docs/projects/thesis theme.pdf](docs/projects/thesis%20theme.pdf).
 
-## 2. Repository Map
+## Problem formulation
 
-Supporting coursework and project material with mini prototype:
+TSN networks guarantee worst-case latency only if their configuration is fixed and verified offline. In practice, flows are added and removed while the network runs. Fast optimisers (heuristics, ILP/SMT, DRL/GNN) can propose changes, but none of them certifies worst-case delays.
+
+The thesis places a **certified admission gate** between any proposer and the network. An action is committed only with a machine-checkable certificate showing that every admitted flow still meets its deadline. That guarantee is a safety property, and it holds only as far as the network model is accurate.
+
+## Preliminary work
+
+**Setting:** 1 Gbit/s switches, fixed routing, token-bucket flows (b, r), at least 2 priority classes, non-preemptive static priority, deterministic network calculus for the admission gate v0 in [`tsn-admission-gate/`](tsn-admission-gate/)
+
+**Per-hop bound** for priority class k at a port of rate C:
+
+- d_k = (B_H + L_lo + B_k) / (C − R_H) + t_proc, valid if R_H + R_k ≤ C
+- Burst leaving the port: b' = b + r · d_k
+- End-to-end bound: D = Σ d_k over the path
+
+B_H and R_H are the total burst and rate of higher-priority flows, L_lo is the largest lower-priority frame (it blocks because transmission is not preempted), and B_k and R_k are the totals for class k itself.
+
+## Repository
 
 ```
-docs/
-├── projects/          PPO implementation notes and presentation (prior hands-on RL work)
-├── courses/
-│   ├── ai-introduction/   Search, logic, knowledge representation, KNN, Naive Bayes
-│   └── deep-learning/     Neural network foundations
-└── math/
-    ├── algebra/           Linear algebra foundations
-    └── probabilistics/    Probability foundations for statistical RL
-src/
-├── rl-foundations/    Bandits, tabular Q-learning, REINFORCE (mini prototypes)
-└── deep-learning/     Backprop, MLP, from-scratch mini-GPT (mini prototypes)
+docs/projects/        Thesis offer, prior PPO project (background for learned proposers)
+docs/courses/         AI introduction (search, constraint satisfaction, logic), deep learning
+docs/math/            Linear algebra, probability
+tsn-admission-gate/   Admission gate 
 ```
 
-## 3. Learning Resources
+## Key references
 
-Video/course material used alongside coursework and papers, grouped to match the repository map below.
-
-**RL foundations**
-- [RL Course by David Silver (DeepMind)](https://www.youtube.com/playlist?list=PLeJKOhW5z62XKURemUDc3N92Min9yaR12) — MDPs, dynamic programming, TD learning, policy gradients.
-- [Stanford CS234: Reinforcement Learning](https://www.youtube.com/playlist?list=PLCH_MtKnU6rXoFJkxfUoeMzU9_CPwdjLq) — more rigorous/current pass, esp. function approximation and policy gradients.
-
-**Deep learning / language models**
-- [Andrej Karpathy — Neural Networks: Zero to Hero](https://www.youtube.com/playlist?list=PLAqhIrjkxbuWI23v9cThsA9GvCAUhRvKZ) — backprop through a from-scratch GPT.
-- [Andrej Karpathy — Let's build GPT: from scratch, in code, spelled out](https://www.youtube.com/watch?v=Ts9151A9X94) — produces the base policy model an RLHF pipeline would fine-tune.
-- [3Blue1Brown — Neural networks / attention series](https://www.youtube.com/playlist?list=PLZZWrBYkx7Otcjr3eCLZDCgfpqnxMY29s) — visual intuition for attention/transformers.
-
-**Math foundations**
-- [3Blue1Brown — Essence of Linear Algebra](https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab)
-- [StatQuest with Josh Starmer](https://www.youtube.com/@statquest/playlists) — probability/statistics playlists underpinning the statistical-RL reading.
-
-**RLHF algorithms (PPO / DPO / GRPO)**
-- [Proximal Policy Optimization (PPO) for LLMs Explained Intuitively](https://www.youtube.com/watch?v=8jtAzxUwDj0)
-- [Direct Preference Optimization (DPO) | Paper Explained](https://www.youtube.com/watch?v=TfybkCFQufc)
-- [PPO & GRPO | Math Explained](https://www.youtube.com/watch?v=5ChE_UPNN78) — ties directly to the DeepSeekMath reference below.
-- [CleanRL — PPO implementation reference](https://docs.cleanrl.dev/rl-algorithms/ppo/) — single-file implementation style used for prototypes.
-- [Hugging Face — A Guide to RL Post-Training for LLMs: PPO, DPO, GRPO, and Beyond](https://huggingface.co/blog/karina-zadorozhny/guide-to-llm-post-training-algorithms) — written comparison of the three algorithms above.
-
-## 4. References
-
-1. Schulman, J., Wolski, F., Dhariwal, P., Radford, A., & Klimov, O. (2017). Proximal Policy Optimization Algorithms. *arXiv:1707.06347*.
-2. Rafailov, R., Sharma, A., Mitchell, E., Ermon, S., Manning, C. D., & Finn, C. (2023). Direct Preference Optimization: Your Language Model is Secretly a Reward Model. *arXiv:2305.18290*.
-3. Shao, Z., Wang, P., Zhu, Q., Xu, R., Song, J., Zhang, M., Li, Y. K., Wu, Y., & Guo, D. (2024). DeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models. *arXiv:2402.03300*.
+1. J.-Y. Le Boudec, P. Thiran, *Network Calculus*, LNCS 2050, Springer, 2001.
+2. L. Zhao, P. Pop, Z. Zheng, Q. Li, "Timing Analysis of AVB Traffic in TSN Networks Using Network Calculus," RTAS 2018. [PDF](https://www2.compute.dtu.dk/~paupo/publications/Zhao2017aa-Timing%20Analysis%20of%20AVB%20Traffic-.pdf)
+3. M. Alshiekh et al., "Safe Reinforcement Learning via Shielding," AAAI 2018.
