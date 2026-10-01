@@ -157,7 +157,7 @@ C0 is needed: omitting a flow from the certificate only lowers the aggregates of
 \label{fig:rate}
 \end{figure}
 
-\textbf{Admission rate.} Both networks accept every request up to about 50, then saturate (Fig.~\ref{fig:rate}). After 1,000 requests, $100 \pm 20$ flows are admitted on the line and $111 \pm 16$ on the tree, an overall rate of 10--11\,\%. Control traffic is accepted slightly more often than stream traffic, because its higher priority shields it from most interference, but its tight deadlines still cause rejections once higher-priority bursts accumulate.
+\textbf{Admission rate.} Both networks accept every request up to about 50, then saturate (Fig.~\ref{fig:rate}). After 1,000 requests, $100 \pm 20$ flows are admitted on the line and $111 \pm 16$ on the tree, an overall rate of 10--11\,\%. Control traffic is accepted slightly more often, as its priority shields it from most interference.
 
 \begin{figure}[t]
 \centering
@@ -184,7 +184,7 @@ Tree & Full        & 2202 & 3718 & \\
 
 \textbf{Run time.} Over all runs, the full and incremental gates return identical verdicts, and the final bounds of both are equal bit for bit. The incremental gate is $2.02\times$ faster on the line and $1.91\times$ on the tree over 1,000 requests (Table~\ref{tab:time}), and its cost per request grows more slowly with the number of admitted flows (Fig.~\ref{fig:time}b). The gain is modest because these networks are small: a request still re-evaluates a median of 19 of the 48 ports. A median decision takes about 1\,ms in Python.
 
-\textbf{Tests.} Eighteen unit tests cover a hand-computed example that the gate reproduces to a relative $10^{-12}$, equality of the two gates on random workloads, the simulator, and tampered certificates: halving one hop delay is rejected by C5, and omitting a flow is rejected by C0 only.
+\textbf{Tests.} Eighteen unit tests cover a hand-computed example (to $10^{-12}$), gate equality, the simulator and tampered certificates, rejected by C5 (halved delay) and C0 (omitted flow).
 
 % ---------------------------------------------------------------------------
 %Trang's work [Updated]: Limitations of the model, the analysis, the certification and the evaluation.

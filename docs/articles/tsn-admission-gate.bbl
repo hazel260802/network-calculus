@@ -23,43 +23,51 @@
 
 \bibitem{ieee8021q}
 {IEEE}, ``{IEEE} standard for local and metropolitan area networks--bridges and
-  bridged networks,'' IEEE Std 802.1Q-2022, 2022.
+  bridged networks,'' IEEE Std 802.1Q-2022, 2022, doi:
+  \href{https://doi.org/10.1109/IEEESTD.2022.10004498}{10.1109/IEEESTD.2022.10004498}.
 
 \bibitem{cruz1991calculus}
 R.~L. Cruz, ``A calculus for network delay, {Part I}: Network elements in
   isolation,'' \emph{IEEE Transactions on Information Theory}, vol.~37, no.~1,
-  pp. 114--131, 1991.
+  pp. 114--131, 1991, doi:
+  \href{https://doi.org/10.1109/18.61109}{10.1109/18.61109}.
 
 \bibitem{leboudec2001nc}
 J.-Y. Le~Boudec and P.~Thiran, \emph{Network Calculus: A Theory of
   Deterministic Queuing Systems for the Internet}, ser. Lecture Notes in
   Computer Science.\hskip 1em plus 0.5em minus 0.4em\relax Springer, 2001, vol.
-  2050.
+  2050, doi:
+  \href{https://doi.org/10.1007/3-540-45318-0}{10.1007/3-540-45318-0}.
 
 \bibitem{xue2024tsn}
 C.~Xue, T.~Zhang, Y.~Zhou, M.~Nixon, A.~Loveless, and S.~Han, ``Real-time
   scheduling for 802.1{Qbv} time-sensitive networking ({TSN}): A systematic
   review and experimental study,'' in \emph{Proc. IEEE Real-Time and Embedded
-  Technology and Applications Symposium (RTAS)}, 2024.
+  Technology and Applications Symposium (RTAS)}, 2024, pp. 108--121, doi:
+  \href{https://doi.org/10.1109/RTAS61025.2024.00017}{10.1109/RTAS61025.2024.00017}.
 
 \bibitem{alshiekh2018shield}
 M.~Alshiekh, R.~Bloem, R.~Ehlers, B.~K{\"o}nighofer, S.~Niekum, and U.~Topcu,
   ``Safe reinforcement learning via shielding,'' in \emph{Proc. AAAI Conference
-  on Artificial Intelligence}, 2018.
+  on Artificial Intelligence}, vol.~32, no.~1, 2018, doi:
+  \href{https://doi.org/10.1609/aaai.v32i1.11797}{10.1609/aaai.v32i1.11797}.
 
 \bibitem{bouillard2022panco}
-A.~Bouillard, ``panco: Performance analysis with network calculus and
-  optimization,'' \url{https://github.com/anne-bou/panco}, 2022, commit
-  f035ccc5.
+A.~Bouillard, ``Trade-off between accuracy and tractability of network calculus
+  in {FIFO} networks,'' \emph{Performance Evaluation}, vol. 153, p. 102250,
+  2022, doi:
+  \href{https://doi.org/10.1016/j.peva.2021.102250}{10.1016/j.peva.2021.102250}.
 
 \bibitem{bouillard2018dnc}
 A.~Bouillard, M.~Boyer, and E.~Le~Corronc, \emph{Deterministic Network
   Calculus: From Theory to Practical Implementation}.\hskip 1em plus 0.5em
-  minus 0.4em\relax Wiley-ISTE, 2018.
+  minus 0.4em\relax Wiley-ISTE, 2018, doi:
+  \href{https://doi.org/10.1002/9781119440284}{10.1002/9781119440284}.
 
 \bibitem{bondorf2014discodnc}
 S.~Bondorf and J.~B. Schmitt, ``The {DiscoDNC} v2: A comprehensive tool for
-  deterministic network calculus,'' in \emph{Proc. International Conference on
-  Performance Evaluation Methodologies and Tools (VALUETOOLS)}, 2014.
+  deterministic network calculus,'' \emph{EAI Endorsed Transactions on Internet
+  of Things}, vol.~1, no.~4, p.~e4, 2015, doi:
+  \href{https://doi.org/10.4108/icst.valuetools.2014.258167}{10.4108/icst.valuetools.2014.258167}.
 
 \end{thebibliography}

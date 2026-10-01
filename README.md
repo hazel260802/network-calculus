@@ -27,7 +27,7 @@ On a line (5 switches) and a tree (1 core + 4 edge switches), each fed 1,000 see
 | | |
 |:---:|:---:|
 | ![Agreement with panco](src/figures/panco_agreement.png) | ![Bound tightness](src/figures/bound_tightness.png) |
-| **Fig. 1.** Our bounds vs. panco, per hop and end to end. | **Fig. 2.** Simulated worst delay vs. bound (2,118 flows). |
+| **Fig. 1.** Our bounds vs. panco, per hop & end to end. | **Fig. 2.** Simulated worst delay vs. bound (2,118 flows). |
 | ![Admission rate](src/figures/admission_rate.png) | ![Scalability](src/figures/scalability.png) |
 | **Fig. 3.** Admission rate of first $N$ requests, per class. | **Fig. 4.** Full vs. incremental gate: total time, cost/request. |
 

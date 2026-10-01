@@ -1,0 +1,280 @@
+% ---------------- PACKAGES ----------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{xcolor}
+\usepackage{array}
+\usepackage{tikz}
+\usepackage{amssymb}
+\usepackage{appendixnumberbeamer}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,fit,calc,decorations.pathmorphing, positioning,shapes.symbols}
+\usepackage{enumitem}
+% ---------------- COLORS ----------------
+\definecolor{gravyblue}{RGB}{0,59,105}
+\definecolor{deepblue}{RGB}{0,45,85}
+\definecolor{softblue}{RGB}{231,242,249}
+\definecolor{midblue}{RGB}{0,105,170}
+\definecolor{tealblue}{RGB}{0,136,150}
+\definecolor{softgray}{RGB}{245,247,250}
+\definecolor{darkgray}{RGB}{60,70,80}
+\definecolor{alertred}{RGB}{184,40,55}
+\definecolor{warmgold}{RGB}{235,170,60}
+
+\usecolortheme[named=gravyblue]{structure}
+
+\setbeamercolor{frametitle}{bg=gravyblue, fg=white}
+\setbeamercolor{title}{fg=white}
+\setbeamercolor{title in head/foot}{bg=softblue, fg=gravyblue}
+\setbeamercolor{author in head/foot}{bg=gravyblue, fg=white}
+\setbeamercolor{date in head/foot}{bg=deepblue, fg=white}
+\setbeamercolor{normal text}{fg=darkgray,bg=white}
+\setbeamercolor{block title}{bg=gravyblue,fg=white}
+\setbeamercolor{block body}{bg=softblue,fg=darkgray}
+
+\setbeamertemplate{block begin}{
+  \par\vskip\medskipamount
+  \begin{beamercolorbox}[colsep*=.75ex,center]{block title}
+    \usebeamerfont*{block title}\insertblocktitle
+  \end{beamercolorbox}
+  {\parskip0pt\par}
+  \begin{beamercolorbox}[colsep*=.75ex,vmode]{block body}
+    \usebeamerfont{block body}
+}
+
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{caption}[numbered]
+
+% Numbered table of contents
+\setbeamertemplate{itemize item}{\color{gravyblue}$\bullet$}
+\setbeamertemplate{itemize subitem}{\color{gravyblue}$\circ$}
+\setbeamertemplate{itemize subsubitem}{\color{gravyblue}$-$}
+
+\setlist[itemize,1]{
+  label=\textcolor{gravyblue}{$\bullet$},
+  leftmargin=1.5em
+}
+
+\setlist[itemize,2]{
+  label=\textcolor{gravyblue}{$\circ$},
+  leftmargin=1.5em
+}
+
+\setlist[itemize,3]{
+  label=\textcolor{gravyblue}{$-$},
+  leftmargin=1.5em
+}
+% ---------- Citation color ----------
+\hypersetup{
+    colorlinks=true,
+    linkcolor=gravyblue,
+    citecolor=gravyblue,
+    urlcolor=gravyblue
+}
+
+
+% ---------------- LOGOS ----------------
+\newcommand{\safelogo}[2]{%
+  \IfFileExists{#2}{\includegraphics[height=#1,keepaspectratio]{#2}}{}%
+}
+
+\logo{\safelogo{0.75cm}{figures/ece.png}}
+
+% ---------------- FOOTER ----------------
+\setbeamertemplate{footline}{%
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.27\paperwidth,ht=3ex,dp=1ex,center,sep=0pt]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertshortauthor
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.51\paperwidth,ht=3ex,dp=1ex,center,sep=0pt]{title in head/foot}%
+    \usebeamerfont{title in head/foot}\insertshorttitle
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.22\paperwidth,ht=3ex,dp=1ex,center,sep=0pt]{date in head/foot}%
+    \usebeamerfont{date in head/foot}\insertframenumber/\inserttotalframenumber
+  \end{beamercolorbox}}%
+}
+
+
+% ---------------- HELPERS ----------------
+\newcommand{\sectiondivider}[2]{%
+\begin{frame}[plain]
+\begin{tikzpicture}[remember picture,overlay]
+  \fill[gravyblue] (current page.south west) rectangle (current page.north east);
+  \fill[softblue,opacity=.14] ($(current page.north west)+(0,-1.3)$) circle (3.2);
+  \fill[midblue,opacity=.18] ($(current page.south east)+(-1.0,0.6)$) circle (3.6);
+\end{tikzpicture}
+\vspace{1.5cm}
+\begin{center}
+{\color{white}\Huge\bfseries #1}\\[0.4cm]
+{\color{softblue}\Large #2}
+\end{center}
+\end{frame}
+}
+
+
+\newcommand{\pill}[1]{%
+\tikz[baseline=(X.base)] \node[fill=softblue,draw=midblue,rounded corners=5pt,inner xsep=7pt,inner ysep=3pt] (X) {\small\bfseries\color{gravyblue} #1};%
+}
+
+\providecommand{\framewithtitle}[1]{\sectiondivider{#1}{}}
+
+% ---------------- CUSTOM TITLE PAGE ----------------
+\setbeamertemplate{title page}{
+\vspace*{0.18cm}
+\begin{center}
+\begin{minipage}{0.95\linewidth}
+\centering
+\safelogo{1.55cm}{figures/CNAM.jpg}
+\hspace{0.8cm}
+\safelogo{1.55cm}{figures/ece.png}
+\hspace{0.8cm}
+\raisebox{0.3cm}{\safelogo{0.95cm}{figures/cedric.png}}
+\end{minipage}
+
+\vspace{0.22cm}
+
+\begin{beamercolorbox}[
+    wd=0.9\paperwidth,
+    rounded=true,
+    shadow=true,
+    sep=0.42cm,
+    center
+]{frametitle}
+{\usebeamerfont{title}\LARGE\bfseries\inserttitle}
+\end{beamercolorbox}
+
+\vspace{0.25cm}
+{\Large\bfseries \insertauthor}
+
+\vspace{0.2cm}
+{\large \insertinstitute}
+
+% \vspace{0.18cm}
+% {\large \insertdate}
+\end{center}
+}
+
+% -------- Timeline colors --------
+\definecolor{gravyblue}{RGB}{0,59,105}
+\definecolor{midblue}{RGB}{0,92,150}
+\definecolor{softblue}{RGB}{229,241,250}
+\definecolor{verysoftblue}{RGB}{245,250,253}
+\definecolor{lineblue}{RGB}{70,130,180}
+
+\tikzset{
+    timelinebox/.style={
+        draw=gravyblue,
+        very thick,
+        rounded corners=2pt,
+        align=center,
+        font=\scriptsize\bfseries,
+        inner sep=2.5pt,
+        text=black
+    },
+    edu/.style={
+        timelinebox,
+        fill=verysoftblue
+    },
+    scholar/.style={
+        timelinebox,
+        fill=softblue
+    },
+    award/.style={
+        timelinebox,
+        fill=white
+    },
+    activity/.style={
+        timelinebox,
+        fill=softblue!65
+    },
+    sectionbg/.style={
+        draw=lineblue,
+        thick,
+        rounded corners=2pt,
+        fill=softblue!35
+    },
+    sectiontitle/.style={
+        font=\small\bfseries,
+        text=gravyblue
+    },
+    ylabel/.style={
+        font=\small\bfseries,
+        text=gravyblue,
+        align=center
+    }
+}
+\tikzset{
+  boxbase/.style={
+    draw=gravyblue,
+    thick,
+    rounded corners=2pt,
+    align=center,
+    inner sep=2.5pt,
+    font=\scriptsize
+  },
+  edu/.style={boxbase, fill=white},
+  scholar/.style={boxbase, fill=softblue!20},
+  award/.style={boxbase, fill=white},
+  activity/.style={boxbase, fill=softblue!35},
+  sectionbg/.style={
+    draw=midblue!75,
+    thin,
+    rounded corners=2pt,
+    fill=softblue!10
+  },
+  sectiontitle/.style={
+    font=\small\bfseries,
+    text=gravyblue
+  },
+  ylabel/.style={
+    font=\small\bfseries,
+    text=gravyblue
+  }
+}
+% -------- Alert box --------
+\setbeamercolor{block title alerted}{bg=red!75!black, fg=white}
+\setbeamercolor{block body alerted}{bg=red!8, fg=black}
+
+% ---------- Diagram Methods Styles ----------
+\definecolor{pblue}{RGB}{53,104,191}
+\definecolor{pgreen}{RGB}{103,154,103}
+\definecolor{ppurple}{RGB}{125,88,170}
+\definecolor{pyellow}{RGB}{226,184,24}
+\definecolor{boxbg}{RGB}{250,250,250}
+\definecolor{textdark}{RGB}{55,65,75}
+
+\tikzset{
+  phasearrow/.style={
+    signal,
+    signal from=west,
+    signal to=east,
+    line width=1.15pt,
+    fill=boxbg,
+    minimum height=1.25cm,
+    align=center,
+    font=\bfseries\large,
+    text=textdark,
+    inner sep=2pt
+  },
+  methodbox/.style={
+    rounded corners=0.18cm,
+    line width=1.15pt,
+    fill=white,
+    align=left,
+    anchor=north,
+    inner sep=0.25cm,
+    font=\scriptsize,
+    text=textdark
+  },
+  boxtitle/.style={
+    font=\bfseries\small,
+    text=textdark
+  },
+  keylabel/.style={
+    font=\bfseries,
+    text=textdark
+  }
+}

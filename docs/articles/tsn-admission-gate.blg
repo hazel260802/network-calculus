@@ -15,42 +15,42 @@ Database file #1: tsn-references.bib
 Done.
 You've used 8 entries,
             4087 wiz_defined-function locations,
-            864 strings with 8845 characters,
-and the built_in function-call counts, 4245 in all, are:
-= -- 309
-> -- 101
-< -- 12
-+ -- 50
+            876 strings with 9444 characters,
+and the built_in function-call counts, 5409 in all, are:
+= -- 461
+> -- 109
+< -- 28
++ -- 56
 - -- 22
-* -- 194
-:= -- 687
+* -- 262
+:= -- 880
 add.period$ -- 16
 call.type$ -- 8
-change.case$ -- 7
-chr.to.int$ -- 24
+change.case$ -- 14
+chr.to.int$ -- 48
 cite$ -- 8
-duplicate$ -- 327
-empty$ -- 420
+duplicate$ -- 405
+empty$ -- 446
 format.name$ -- 27
-if$ -- 971
+if$ -- 1244
 int.to.chr$ -- 0
 int.to.str$ -- 8
-missing$ -- 70
+missing$ -- 81
 newline$ -- 47
 num.names$ -- 8
-pop$ -- 185
+pop$ -- 170
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 2
-skip$ -- 339
+skip$ -- 442
 stack$ -- 0
-substring$ -- 64
-swap$ -- 210
-text.length$ -- 4
+substring$ -- 150
+swap$ -- 309
+text.length$ -- 12
 text.prefix$ -- 0
 top$ -- 5
 type$ -- 8
 warning$ -- 0
-while$ -- 12
+while$ -- 18
 width$ -- 9
-write$ -- 90
+write$ -- 105
