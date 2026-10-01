@@ -3,6 +3,7 @@ Network and flow model.
 """
 from __future__ import annotations
 
+import zlib
 from collections import deque
 from dataclasses import dataclass, field
 
@@ -53,26 +54,33 @@ class Network:
 
     # ---- routing -------------------------------------------------------
     def route(self, src: str, dst: str) -> tuple:
-        """Path as a tuple of ports [(src, s1), (s1, s2), ..., (sk, dst)]."""
+        """
+        Path as a tuple of ports [(src, s1), (s1, s2), ..., (sk, dst)].
+
+        Shortest path; ties between equal-cost next hops (e.g. the spines of a
+        leaf-spine) are broken by a CRC32 hash of (src, dst), as in ECMP. The
+        route of a pair is therefore fixed and reproducible across runs.
+        """
         key = (src, dst)
         if key not in self._routes:
-            parent = {src: None}
-            q = deque([src])
+            # hop distance to dst; end stations do not forward traffic
+            dist = {dst: 0}
+            q = deque([dst])
             while q:
                 u = q.popleft()
-                if u == dst:
-                    break
-                for v in sorted(self.adj[u]):
-                    # end stations do not forward traffic
-                    if v not in parent and (v == dst or v not in self.end_stations):
-                        parent[v] = u
-                        q.append(v)
-            if dst not in parent:
+                for v in self.adj[u]:
+                    if v not in dist and (v == src or v not in self.end_stations):
+                        dist[v] = dist[u] + 1
+                        if v != src:
+                            q.append(v)
+            if src not in dist:
                 raise ValueError(f"no route {src} -> {dst}")
-            nodes = [dst]
-            while nodes[-1] != src:
-                nodes.append(parent[nodes[-1]])
-            nodes.reverse()
+            h = zlib.crc32(f"{src}->{dst}".encode())
+            nodes = [src]
+            while nodes[-1] != dst:
+                u = nodes[-1]
+                nxt = sorted(v for v in self.adj[u] if dist.get(v) == dist[u] - 1)
+                nodes.append(nxt[h % len(nxt)])
             self._routes[key] = tuple(zip(nodes[:-1], nodes[1:]))
         return self._routes[key]
 

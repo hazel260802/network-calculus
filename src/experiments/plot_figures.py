@@ -35,8 +35,8 @@ plt.rcParams.update({
     "savefig.pad_inches": 0.05,
 })
 
-TOPOLOGIES = ["line", "tree"]
-TOPO_LABEL = {"line": "Line (5 switches)", "tree": "Tree (1 core + 4 edge)"}
+TOPOLOGIES = ["ls-small", "ls-large"]
+TOPO_LABEL = {"ls-small": "2 core × 4 edge (56 ports)", "ls-large": "4 core × 8 edge (144 ports)"}
 GATES = ["full", "incremental"]
 GATE_LABEL = {"full": "Full TFA", "incremental": "Incremental"}
 GATE_COLOR = {"full": "#1f77b4", "incremental": "#ff7f0e"}
@@ -99,7 +99,7 @@ def admission_latency():
     for topo in TOPOLOGIES:
         for gate in GATES:
             us = seed_stack(topo, gate, "us").ravel()
-            print(f"  {topo:5s} {gate:11s}  median={np.median(us):7.1f}  p95={np.percentile(us, 95):7.1f}"
+            print(f"  {topo:8s} {gate:11s}  median={np.median(us):7.1f}  p95={np.percentile(us, 95):7.1f}"
                   f"  max={us.max():8.1f}  N={us.size}")
 
     fig, axes = plt.subplots(1, 2, figsize=(7, 3.5), sharey=True)
@@ -124,7 +124,7 @@ def admission_latency():
 def scalability():
     print("\n[scalability] cumulative time at N requests (s, mean over seeds):")
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8, 3.6))
-    for topo, ls, mk in (("line", "-", "o"), ("tree", "--", "s")):
+    for topo, ls, mk in (("ls-small", "-", "o"), ("ls-large", "--", "s")):
         for gate in GATES:
             cum = np.cumsum(seed_stack(topo, gate, "us"), axis=1) / 1e6
             at = cum[:, np.array(CHECKPOINTS) - 1]
@@ -132,7 +132,7 @@ def scalability():
             ax1.plot(CHECKPOINTS, mean, ls, marker=mk, color=GATE_COLOR[gate], linewidth=1.6,
                      markersize=4, label=f"{GATE_LABEL[gate]}, {topo}")
             ax1.fill_between(CHECKPOINTS, mean - std, mean + std, color=GATE_COLOR[gate], alpha=0.15)
-            print(f"  {topo:5s} {gate:11s} " + "  ".join(f"N={n}:{m:.3f}" for n, m in zip(CHECKPOINTS, mean)))
+            print(f"  {topo:8s} {gate:11s} " + "  ".join(f"N={n}:{m:.3f}" for n, m in zip(CHECKPOINTS, mean)))
 
             # per-request time against the size of the admitted state (binned)
             n_adm = seed_stack(topo, gate, "n_adm").ravel()
@@ -145,7 +145,7 @@ def scalability():
 
         speed = (seed_stack(topo, "full", "us").sum(axis=1) /
                  seed_stack(topo, "incremental", "us").sum(axis=1))
-        print(f"  {topo:5s} incremental speed-up over 1,000 requests: {speed.mean():.2f}x ± {speed.std():.2f}")
+        print(f"  {topo:8s} incremental speed-up over 1,000 requests: {speed.mean():.2f}x ± {speed.std():.2f}")
 
     ax1.set_xscale("log")
     ax1.set_xlabel("Requests processed $N$")
@@ -186,7 +186,7 @@ def admission_rate():
                         linewidth=1.4, markersize=4, capsize=2, label=PRIO_LABEL[p])
         total = (np.cumsum(acc, axis=1) / np.arange(1, acc.shape[1] + 1))[:, cp - 1]
         ax.plot(cp, total.mean(axis=0), "k--", linewidth=1.0, label="All flows")
-        print(f"  {topo:5s} " + "  ".join(f"N={n}:{v:.2f}" for n, v in zip(cp, total.mean(axis=0)))
+        print(f"  {topo:8s} " + "  ".join(f"N={n}:{v:.2f}" for n, v in zip(cp, total.mean(axis=0)))
               + f"   admitted at N=1000: {acc.sum(axis=1).mean():.0f} ± {acc.sum(axis=1).std():.0f}")
         ax.set_xscale("log")
         ax.set_xlabel("Requests $N$")

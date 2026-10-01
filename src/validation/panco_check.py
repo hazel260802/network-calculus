@@ -46,7 +46,7 @@ from panco.descriptor.server import Server  # noqa: E402
 from panco.staticpriorities.spServer import SpServer  # noqa: E402
 
 from tsn_gate import Flow, IncrementalGate  # noqa: E402
-from tsn_gate.topologies import line, single_switch, tree  # noqa: E402
+from tsn_gate.topologies import leaf_spine_large, leaf_spine_small, single_switch  # noqa: E402
 from tsn_gate.workload import random_flows  # noqa: E402
 
 US = 1e6   # seconds -> microseconds
@@ -60,7 +60,7 @@ def scenarios():
     g.admit(Flow(1, "es0", "es1", b=12000, r=12e6, L=12000, prio=1, deadline=1e-4))
     g.admit(Flow(2, "es2", "es1", b=800, r=0.8e6, L=800, prio=0, deadline=5e-5))
     out.append(("hand", net, g))
-    for name, make, n in [("line", line, 60), ("tree", tree, 60)]:
+    for name, make, n in [("ls-small", leaf_spine_small, 60), ("ls-large", leaf_spine_large, 60)]:
         for seed in (0, 1):
             net = make()
             g = IncrementalGate(net)

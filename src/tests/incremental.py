@@ -4,30 +4,30 @@ import dataclasses
 import pytest
 
 from tsn_gate import FullGate, IncrementalGate, check_certificate, full_analysis
-from tsn_gate.topologies import line, tree
+from tsn_gate.topologies import leaf_spine_large, leaf_spine_small
 from tsn_gate.workload import random_flows
 
 
-@pytest.mark.parametrize("make_net", [line, tree])
+@pytest.mark.parametrize("make_net, n_req", [(leaf_spine_small, 150), (leaf_spine_large, 400)])
 @pytest.mark.parametrize("seed", [0, 1])
-def test_same_verdicts_and_bitwise_equal_bounds(make_net, seed):
+def test_same_verdicts_and_bitwise_equal_bounds(make_net, n_req, seed):
     net = make_net()
     full, inc = FullGate(net), IncrementalGate(net)
     n_acc = 0
-    for f in random_flows(net, 150, seed=seed):
+    for f in random_flows(net, n_req, seed=seed):
         ok_f, cert_f = full.admit(f)
         ok_i, cert_i = inc.admit(f)
         assert ok_f == ok_i, f"flow {f.id}"
         assert cert_f.state_after == cert_i.state_after
         n_acc += ok_f
-    assert 0 < n_acc < 150                     # the workload exercises both verdicts
+    assert 0 < n_acc < n_req                    # the workload exercises both verdicts
     A = full_analysis(net, inc.flows, inc.paths)
     assert A.e2e == inc.e2e                    # exact float equality, not approx
     assert full.witnesses == inc.witnesses     # identical certificates
 
 
 def test_incremental_certificate_checks_and_is_local():
-    net = line()
+    net = leaf_spine_small()
     inc = IncrementalGate(net)
     for f in random_flows(net, 80, seed=3):
         ok, cert = inc.admit(f)
@@ -38,7 +38,7 @@ def test_incremental_certificate_checks_and_is_local():
 
 
 def test_checker_rejects_tampered_certificate():
-    net = tree()
+    net = leaf_spine_large()
     g = FullGate(net)
     for f in random_flows(net, 40, seed=5):
         g.admit(f)

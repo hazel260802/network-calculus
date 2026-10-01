@@ -1,4 +1,4 @@
-%Trang's work [Updated]: Architecture figure redrawn across both columns: (a) TSN topology in the style of Zhao et al. Fig. 1, (b) packet handling by priority at an NP-SP output port, (c) admission gate pipeline. Colours match the result figures: red = class 0, green = class 1.
+%Trang's work [Updated]: Architecture figure redrawn across both columns: (a) TSN topology of the experiments, with ECMP routes, (b) packet handling by priority at an NP-SP output port, (c) admission gate pipeline. Colours match the result figures: red = class 0, green = class 1.
 \definecolor{cHigh}{HTML}{D62728}
 \definecolor{cLow}{HTML}{2CA02C}
 \definecolor{cReq}{HTML}{1F77B4}
@@ -17,25 +17,29 @@
 }
 \begin{figure*}[t]
 \centering
-% ---------------- (a) TSN network topology example ----------------
+% ---------------- (a) TSN topology used in the experiments ----------------
 \subfloat[TSN topology]{%
 \begin{tikzpicture}
-  \node[es] (es1) at (0, 1.9) {ES$_1$};
-  \node[es] (es2) at (0, 0.5) {ES$_2$};
-  \node[sw] (sw1) at (1.6, 1.2) {SW$_1$};
-  \node[sw] (sw2) at (3.7, 1.2) {SW$_2$};
-  \node[es] (es3) at (5.3, 1.9) {ES$_3$};
-  \node[es] (es4) at (5.3, 0.5) {ES$_4$};
-  \node[sw] (sw3) at (2.65, -0.1) {SW$_3$};
-  \foreach \a/\b in {es1/sw1, es2/sw1, sw1/sw2, sw2/es3, sw2/es4, sw1/sw3, sw2/sw3}
-    \draw[link] (\a) -- (\b);
-  \draw[route, cHigh, dashed] (0.4, 2.2) -- (1.6, 1.74) -- (3.7, 1.74) -- (4.9, 2.2);
-  \draw[route, cReq, densely dotted, very thick] (0.4, 0.78) -- (1.6, 1.56) -- (3.7, 1.56) -- (4.88, 1.82);
-  \draw[route, cLow, dashed] (0.4, 0.2) -- (1.6, 0.7) -- (3.7, 0.7) -- (4.9, 0.2);
-  \node[cHigh] at (0.9, 2.22) {$f_1$};
-  \node[cReq]  at (0.3, 1.2) {$f$};
-  \node[cLow]  at (0.9, 0.18) {$f_2$};
-  \node[font=\scriptsize\itshape] at (2.65, 1.0) {port $p$};
+  % two-tier TSN network: every edge switch linked to both core switches
+  \foreach \x in {0.45, 1.95, 3.45, 4.95} {
+    \foreach \s in {1.95, 3.45} \draw[black!35, thick] (\x, 1.2) -- (\s, 2.5);
+    \draw[black!35, thick] (\x, 0) -- (\x, 1.2);
+  }
+  % ECMP routes: f1 via SW5, f2 and f via SW6; all three meet at port p (SW4 -> ES4)
+  \draw[route, cHigh, dashed] (0.45, 0.22) -- (0.45, 1.2) -- (1.95, 2.5) -- (4.83, 1.2) -- (4.83, 0.22);
+  \draw[route, cLow, dashed]  (1.95, 0.22) -- (1.95, 1.2) -- (3.5, 2.55) -- (5.0, 1.25) -- (4.95, 0.22);
+  \draw[route, cReq, densely dotted, very thick] (3.45, 0.22) -- (3.45, 2.45) -- (4.9, 1.15) -- (5.07, 1.15) -- (5.07, 0.22);
+  % nodes on top
+  \node[sw] at (1.95, 2.5) {SW$_5$};
+  \node[sw] at (3.45, 2.5) {SW$_6$};
+  \foreach \x/\i in {0.45/1, 1.95/2, 3.45/3, 4.95/4} {
+    \node[sw] at (\x, 1.2) {SW$_\i$};
+    \node[es] at (\x, 0) {ES$_\i$};
+  }
+  \node[cHigh] at (0.2, 0.62) {$f_1$};
+  \node[cLow]  at (1.7, 0.62) {$f_2$};
+  \node[cReq]  at (3.2, 0.62) {$f$};
+  \node[font=\scriptsize\itshape, anchor=west] at (5.15, 0.62) {port $p$};
 \end{tikzpicture}}%
 \hfil
 % ---------------- (b) packet handling at an NP-SP output port ----------------
@@ -78,7 +82,7 @@
 % ---------------- (c) admission gate functionality ----------------
 \subfloat[Admission gate]{%
 \begin{tikzpicture}
-  \node[box, minimum width=2.2cm, fill=white] (prop) at (1.9, 3.0) {Proposer\\(heuristic, ILP, DRL)};
+  \node[box, minimum width=2.2cm, fill=white] (prop) at (1.9, 3.0) {Greedy proposer\\(arrival order)};
   \node[box, minimum width=2.2cm, fill=cReq!12] (gate) at (1.9, 1.85) {Admission gate\\TFA \eqref{eq:hop}--\eqref{eq:e2e}};
   \node[box, minimum width=2.2cm, fill=cLow!15] (chk) at (1.9, 0.75) {Checker C0--C6};
   \node[box, minimum width=2.2cm, fill=white] (com) at (1.9, -0.2) {commit $S \cup \{f\}$};
@@ -92,6 +96,6 @@
   \draw[->, black!60] (com.west) -| (st.south);
   \draw[->, dashed, cHigh] (gate.east) -- ++(0.55, 0) |- node[right, pos=0.25] {reject} (prop.east);
 \end{tikzpicture}}
-\caption{System architecture. (a)~Admitted flows $f_1$ (class 0) and $f_2$ (class 1) and a new class-0 request $f$ share output port $p$. (b)~At $p$, frames are classified by priority into FIFO queues; the strict-priority (SP) selector serves class 0 first but cannot preempt a class-1 frame already in transmission, which is the $L_{lo}$ term of~\eqref{eq:hop}. (c)~A proposed change is committed only if the gate's certificate passes the independent checker, which also reads the flow database (C0); a rejection returns the violated flows to the proposer.}
+\caption{System architecture. (a)~Admitted flows $f_1$ (class 0) via SW$_5$ and $f_2$ (class 1) via SW$_6$ and a new class-0 request $f$ share output port $p$. (b)~At $p$, frames are classified by priority into FIFO queues; the strict-priority (SP) selector serves class 0 first but cannot preempt a class-1 frame already in transmission, which is the $L_{lo}$ term of~\eqref{eq:hop}. (c)~A proposed change is committed only if the gate's certificate passes the independent checker, which also reads the flow database (C0); a rejection returns the violated flows to the proposer. Our proposer is greedy: requests in arrival order, never revisited.}
 \label{fig:architecture}
 \end{figure*}

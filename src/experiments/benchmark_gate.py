@@ -3,7 +3,7 @@
 Benchmark the admission gate (speed, admission rate, bound safety).
 
 E1  requests.csv    One row per admission request: 1,000 seeded requests per run,
-                    line and tree topologies, full and incremental gates, SEEDS seeds.
+                    small and large leaf-spine topologies, full and incremental gates, SEEDS seeds.
                     The first N rows of a run are the experiment for N requests, so one
                     run covers every N in 10..1,000.
 E2  simulation.csv  For every flow admitted in E1 (incremental gate), its network-calculus
@@ -23,7 +23,7 @@ sys.path.insert(0, ROOT)
 
 from tsn_gate import FullGate, IncrementalGate  # noqa: E402
 from tsn_gate.simulator import simulate  # noqa: E402
-from tsn_gate.topologies import line, tree  # noqa: E402
+from tsn_gate.topologies import leaf_spine_large, leaf_spine_small  # noqa: E402
 from tsn_gate.workload import random_flows  # noqa: E402
 
 RESULTS_DIR = os.path.join(ROOT, "results")
@@ -31,7 +31,7 @@ os.makedirs(RESULTS_DIR, exist_ok=True)
 
 N_REQUESTS = 1000
 SEEDS = range(10)
-TOPOLOGIES = {"line": line, "tree": tree}
+TOPOLOGIES = {"ls-small": leaf_spine_small, "ls-large": leaf_spine_large}
 GATES = {"full": FullGate, "incremental": IncrementalGate}
 T_PROC = 1e-6        # switch processing delay (s), same as the simulator test
 SIM_HORIZON = 10e-3  # simulated time (s)
@@ -54,7 +54,7 @@ def run_requests(rows):
                     ports = g.last_ports_recomputed if gate_name == "incremental" else len(net.ports())
                     rows.append([topo, gate_name, seed, i + 1, f.prio, int(ok), n_admitted,
                                  f"{dt_us:.2f}", ports])
-                print(f"[E1] {topo:5s} seed={seed} {gate_name:11s} admitted={n_admitted:4d}/{N_REQUESTS}"
+                print(f"[E1] {topo:8s} seed={seed} {gate_name:11s} admitted={n_admitted:4d}/{N_REQUESTS}"
                       f"  {time.perf_counter() - t_run:.2f}s")
 
 
@@ -72,7 +72,7 @@ def run_simulation(rows):
                 n_viol += obs > bound * (1 + 1e-9)
                 rows.append([topo, seed, fid, fl.prio, len(g.paths[fid]),
                              f"{bound * 1e6:.4f}", f"{obs * 1e6:.4f}", f"{fl.deadline * 1e6:.4f}"])
-            print(f"[E2] {topo:5s} seed={seed} flows={len(g.flows):4d}  bound violations={n_viol}")
+            print(f"[E2] {topo:8s} seed={seed} flows={len(g.flows):4d}  bound violations={n_viol}")
 
 
 def write_csv(name, header, rows):

@@ -91,18 +91,20 @@ Factories, vehicles and aircraft replace dedicated fieldbuses with \textbf{one E
 \begin{columns}[T,totalwidth=\textwidth]
 \column{0.55\textwidth}
 \begin{block}{A certified admission gate}
-Placed between \textbf{any} proposer and the network, like a safety shield \cite{alshiekh2018shield}: a change is committed only with a \textbf{certificate} that an \textbf{independent checker} re-verifies.
+Between \textbf{any} proposer and the network, like a safety shield \cite{alshiekh2018shield}: a change is committed only with a \textbf{certificate} re-verified by an \textbf{independent checker}. We develop:
 \end{block}
-\begin{itemize}
-  \item \textbf{C1.} Gate $\mathrm{admit}(S,f)\to(\mathit{verdict},\mathit{certificate})$ for non-preemptive static-priority TSN, with a soundness argument.
-  \item \textbf{C2.} Incremental gate: recomputes only the affected ports, \textbf{bit-identical} bounds.
-  \item \textbf{C3.} Validation against \textbf{panco} \cite{bouillard2022panco}, simulation and tests; fully reproducible.
-  \item \textbf{C4.} Explicit limits of the guarantee.
+\begin{itemize}\footnotesize
+  \setlength{\itemsep}{1pt}
+  \item \textbf{C1.} A \textbf{TSN topology} with redundant core switches, feed-forward under ECMP.
+  \item \textbf{C2.} An \textbf{admission gate}: a flow is accepted only if all deadlines still hold.
+  \item \textbf{C3.} Incremental gate: affected ports only, \textbf{bit-identical} bounds.
+  \item \textbf{C4.} Validation: \textbf{panco} \cite{bouillard2022panco}, simulation, tests; reproducible.
+  \item \textbf{C5.} Explicit limits of the guarantee.
 \end{itemize}
 \column{0.42\textwidth}
 \centering
 \begin{tikzpicture}[font=\scriptsize, >=Latex]
-  \node[box, minimum width=2.6cm, fill=white] (prop) at (1.9, 3.0) {Proposer\\(heuristic, ILP, DRL)};
+  \node[box, minimum width=2.6cm, fill=white] (prop) at (1.9, 3.0) {Greedy proposer\\(arrival order)};
   \node[box, minimum width=2.6cm, fill=cReq!12] (gate) at (1.9, 1.85) {Admission gate\\TFA bounds};
   \node[box, minimum width=2.6cm, fill=cLow!15] (chk) at (1.9, 0.75) {Checker C0--C6};
   \node[box, minimum width=2.6cm, fill=white] (com) at (1.9, -0.25) {commit $S \cup \{f\}$};
@@ -128,8 +130,8 @@ Placed between \textbf{any} proposer and the network, like a safety shield \cite
 \begin{columns}[T,totalwidth=\textwidth]
 \column{0.5\textwidth}
 \begin{itemize}
-  \item \textbf{Network}: switches and end stations, full-duplex links of rate $C=1$\,Gbit/s; each link direction is an output \textbf{port}; processing delay $t_{proc}$.
-  \item \textbf{Routing}: fixed shortest paths; port dependency graph checked \textbf{feed-forward}.
+  \item \textbf{Network}: edge switches linked to every core switch, end stations on edge switches, full-duplex links of rate $C=1$\,Gbit/s; each link direction is an output \textbf{port}; processing delay $t_{proc}$.
+  \item \textbf{Routing}: fixed shortest paths, ECMP over core switches; port dependency graph checked \textbf{feed-forward}.
   \item \textbf{Flow} $f$: token bucket $\alpha_f(t)=b_f+r_f t$, max frame $L_f$, priority class $k_f$ (0 highest), deadline $D^{\max}_f$.
   \item \textbf{Ports}: non-preemptive static priority (\textbf{NP-SP}), FIFO within a class.
 \end{itemize}
@@ -137,26 +139,30 @@ Placed between \textbf{any} proposer and the network, like a safety shield \cite
 \centering
 \vspace{0.2cm}
 \begin{tikzpicture}[font=\scriptsize, >=Latex, scale=1.05, transform shape]
-  \node[es] (es1) at (0, 1.9) {ES$_1$};
-  \node[es] (es2) at (0, 0.5) {ES$_2$};
-  \node[sw] (sw1) at (1.6, 1.2) {SW$_1$};
-  \node[sw] (sw2) at (3.7, 1.2) {SW$_2$};
-  \node[es] (es3) at (5.3, 1.9) {ES$_3$};
-  \node[es] (es4) at (5.3, 0.5) {ES$_4$};
-  \node[sw] (sw3) at (2.65, -0.1) {SW$_3$};
-  \foreach \a/\b in {es1/sw1, es2/sw1, sw1/sw2, sw2/es3, sw2/es4, sw1/sw3, sw2/sw3}
-    \draw[link] (\a) -- (\b);
-  \draw[route, cHigh, dashed] (0.4, 2.2) -- (1.6, 1.74) -- (3.7, 1.74) -- (4.9, 2.2);
-  \draw[route, cReq, densely dotted, very thick] (0.4, 0.78) -- (1.6, 1.56) -- (3.7, 1.56) -- (4.88, 1.82);
-  \draw[route, cLow, dashed] (0.4, 0.2) -- (1.6, 0.7) -- (3.7, 0.7) -- (4.9, 0.2);
-  \node[cHigh] at (0.9, 2.22) {$f_1$};
-  \node[cReq]  at (0.3, 1.2) {$f$};
-  \node[cLow]  at (0.9, 0.18) {$f_2$};
-  \node[font=\scriptsize\itshape] at (2.65, 1.0) {port $p$};
+  % two-tier TSN network: every edge switch linked to both core switches
+  \foreach \x in {0.45, 1.95, 3.45, 4.95} {
+    \foreach \s in {1.95, 3.45} \draw[black!35, thick] (\x, 1.2) -- (\s, 2.5);
+    \draw[black!35, thick] (\x, 0) -- (\x, 1.2);
+  }
+  % ECMP routes: f1 via SW5, f2 and f via SW6; all three meet at port p (SW4 -> ES4)
+  \draw[route, cHigh, dashed] (0.45, 0.22) -- (0.45, 1.2) -- (1.95, 2.5) -- (4.83, 1.2) -- (4.83, 0.22);
+  \draw[route, cLow, dashed]  (1.95, 0.22) -- (1.95, 1.2) -- (3.5, 2.55) -- (5.0, 1.25) -- (4.95, 0.22);
+  \draw[route, cReq, densely dotted, very thick] (3.45, 0.22) -- (3.45, 2.45) -- (4.9, 1.15) -- (5.07, 1.15) -- (5.07, 0.22);
+  % nodes on top
+  \node[sw] at (1.95, 2.5) {SW$_5$};
+  \node[sw] at (3.45, 2.5) {SW$_6$};
+  \foreach \x/\i in {0.45/1, 1.95/2, 3.45/3, 4.95/4} {
+    \node[sw] at (\x, 1.2) {SW$_\i$};
+    \node[es] at (\x, 0) {ES$_\i$};
+  }
+  \node[cHigh] at (0.2, 0.62) {$f_1$};
+  \node[cLow]  at (1.7, 0.62) {$f_2$};
+  \node[cReq]  at (3.2, 0.62) {$f$};
+  \node[font=\scriptsize\itshape, anchor=west] at (5.15, 0.62) {port $p$};
 \end{tikzpicture}
 
 \vspace{0.15cm}
-{\scriptsize Admitted $f_1$ (class 0), $f_2$ (class 1) and a new class-0 request $f$ share port $p$: admitting $f$ can delay both.}
+{\scriptsize ECMP routes $f_1$ (class 0) via SW$_5$, $f_2$ (class 1) and the new class-0 request $f$ via SW$_6$; all share port $p$, so admitting $f$ can delay both.}
 \end{columns}
 \end{frame}
 
@@ -293,12 +299,12 @@ If a certificate passes C0--C6, every admitted flow meets its deadline under the
 \scriptsize
 \renewcommand{\arraystretch}{1.25}
 \begin{tabular}{@{}>{\bfseries\color{gravyblue}}l@{\hspace{6pt}}>{\raggedright\arraybackslash}p{4.0cm}@{}}
-Line   & 5 switches, 4 end stations each \\
-Tree   & 1 core + 4 edge, 5 end stations each \\
-Ports  & 48 per topology, $C=1$\,Gbit/s \\
+Small  & 2 core $\times$ 4 edge switches, 56 ports \\
+Large  & 4 core $\times$ 8 edge switches, 144 ports \\
+Links  & 5 end stations per edge switch, ECMP, $C=1$\,Gbit/s \\
 Class 0 & 64--256\,B, deadline 0.1--0.5\,ms \\
 Class 1 & 500--1500\,B, deadline 0.5--2\,ms \\
-Runs   & 1,000 requests $\times$ 10 seeds, both gates \\
+Runs   & greedy proposer, 1,000 requests $\times$ 10 seeds, both gates \\
 \end{tabular}
 \end{block}
 \vspace{0.1cm}
@@ -308,9 +314,9 @@ Runs   & 1,000 requests $\times$ 10 seeds, both gates \\
 \includegraphics[width=\linewidth]{figures/panco_agreement.pdf}
 
 \vspace{0.15cm}
-\stattile{midblue}{$3.3\times10^{-16}$}{per hop, 837 values}
+\stattile{midblue}{$2.5\times10^{-16}$}{per hop, 1,119 values}
 \hspace{0.2cm}
-\stattile{tealblue}{$2.9\times10^{-6}$}{end to end, 210 values}
+\stattile{tealblue}{$2.9\times10^{-6}$}{end to end, 242 values}
 
 \vspace{0.05cm}
 {\scriptsize max.\ relative difference (end to end: lp\_solve prints 6 digits)}
@@ -324,12 +330,12 @@ Runs   & 1,000 requests $\times$ 10 seeds, both gates \\
 \centering
 \includegraphics[width=\linewidth]{figures/bound_tightness.pdf}
 \footnotesize
-\textbf{0 violations} over 2,118 admitted flows; median observed/bound 0.17 (class 0), 0.11 (class 1). A sanity check, not a tightness measure.
+\textbf{0 violations} over 4,915 admitted flows; median observed/bound 0.19 (class 0), 0.10 (class 1). A sanity check, not a tightness measure.
 \column{0.49\textwidth}
 \centering
 \includegraphics[width=\linewidth]{figures/admission_rate.pdf}
 \footnotesize
-All requests accepted up to $\approx$50; saturation at $100\pm20$ (line) and $111\pm16$ (tree) of 1,000; class 0 accepted slightly more often.
+All requests accepted up to 50 (small) and 200 (large); $150\pm14$ and $342\pm22$ admitted of 1,000; class 0 accepted slightly more often.
 \end{columns}
 \end{frame}
 
@@ -346,16 +352,16 @@ All requests accepted up to $\approx$50; saturation at $100\pm20$ (line) and $11
 \toprule
 Topology & Gate & Median $\mu$s & Speed-up \\
 \midrule
-Line & Full & 1944 & \\
-     & Incremental & 964 & $2.02\times$ \\
-Tree & Full & 2202 & \\
-     & Incremental & 1186 & $1.91\times$ \\
+Small & Full & 3097 & \\
+      & Incremental & 1617 & $1.97\times$ \\
+Large & Full & 7317 & \\
+      & Incremental & 3331 & $2.24\times$ \\
 \bottomrule
 \end{tabular}
 \vspace{0.3cm}
 \begin{itemize}
   \item Identical verdicts and \textbf{bit-identical} bounds.
-  \item Gain modest on small networks: a request still re-evaluates 19 of 48 ports (median).
+  \item Gain grows with size: a request re-evaluates 24 of 56 ports (small) but 49 of 144 (large), median.
   \item 18 unit tests, incl.\ tampered certificates (C5 and C0 reject them).
 \end{itemize}
 \end{columns}
@@ -370,7 +376,7 @@ Tree & Full & 2202 & \\
 \begin{columns}[T,totalwidth=\textwidth]
 \column{0.48\textwidth}
 \begin{block}{Model}
-Single link rate, fixed routing, feed-forward, strict NP-SP; no CBS/TAS shapers, preemption or clock effects; Ethernet overheads folded into $L_f,b_f,r_f$.
+Single link rate, fixed ECMP routing, feed-forward (no rings), strict NP-SP; no CBS/TAS shapers, preemption or clock effects; Ethernet overheads folded into $L_f,b_f,r_f$.
 \end{block}
 \begin{block}{Analysis}
 TFA is sound but pessimistic compared with PMOO or LP-based analyses \cite{bondorf2014discodnc,bouillard2018dnc}: fewer admissions, never an unsafe one.
@@ -380,7 +386,7 @@ TFA is sound but pessimistic compared with PMOO or LP-based analyses \cite{bondo
 Proof sketch on paper, not mechanised; floating-point checker with $10^{-9}$ tolerance; the certificate attests to the model, not to the deployed switches.
 \end{block}
 \begin{block}{Evaluation}
-Additions only; small networks (saturation $\approx$100 flows), two classes; simulator does not force the worst case; no proposer connected yet.
+Additions only; two-tier topologies of at most 144 ports, two classes; simulator does not force the worst case; only a greedy proposer (arrival order), no ILP or DRL yet.
 \end{block}
 \end{columns}
 \end{frame}
@@ -396,11 +402,12 @@ Additions only; small networks (saturation $\approx$100 flows), two classes; sim
 \begin{block}{Contribution}
 \footnotesize\raggedright
 \begin{itemize}
+  \item \textbf{TSN topology} with redundant core switches, feed-forward under ECMP.
   \item \textbf{Safe traffic allocation}: a flow is admitted only if every deadline still holds.
   \item \textbf{Certificate} per decision, re-checked by a 50-line checker (C0--C6).
   \item \textbf{Any proposer}, even a learned one, cannot commit an unsafe allocation.
-  \item \textbf{Incremental gate}: $\approx$1\,ms, bit-identical bounds, 1.9--2.0$\times$ faster.
-  \item \textbf{Validated}: matches panco; 0 violations over 2,118 flows.
+  \item \textbf{Incremental gate}: 1.6--3.3\,ms, bit-identical bounds, 2.0--2.2$\times$ faster.
+  \item \textbf{Validated}: matches panco; 0 violations over 4,915 flows.
 \end{itemize}
 \end{block}
 \column{0.48\textwidth}

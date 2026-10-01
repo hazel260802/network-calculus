@@ -1,33 +1,38 @@
-"""Reference topologies in feed-forward under shortest-path routing."""
+"""Reference topologies, feed-forward under shortest-path (ECMP) routing."""
 from __future__ import annotations
 
 from .model import GBPS, Network
 
 
-def line(n_switches: int = 5, es_per_switch: int = 4, C: float = GBPS, t_proc: float = 0.0) -> Network:
-    """Daisy chain sw with end stations on each switch."""
-    sws = [f"sw{i}" for i in range(n_switches)]
-    links = list(zip(sws[:-1], sws[1:]))
-    es = []
-    for i, sw in enumerate(sws):
-        for j in range(es_per_switch):
+def leaf_spine(n_spine: int = 2, n_leaf: int = 4, es_per_leaf: int = 5, C: float = GBPS,
+               t_proc: float = 0.0) -> Network:
+    """
+    Two-tier leaf-spine (folded Clos): every leaf links to every spine, end
+    stations attach to leaves. Inter-leaf traffic goes leaf -> spine -> leaf over
+    one of n_spine equal-cost paths, chosen per (src, dst) pair by ECMP hashing.
+    Not a tree (redundant paths), yet feed-forward: every route climbs at most
+    once to a spine and then descends.
+    """
+    spines = [f"sp{s}" for s in range(n_spine)]
+    links, es = [], []
+    for i in range(n_leaf):
+        leaf = f"lf{i}"
+        links += [(leaf, sp) for sp in spines]
+        for j in range(es_per_leaf):
             e = f"es{i}_{j}"
             es.append(e)
-            links.append((e, sw))
+            links.append((e, leaf))
     return Network(links, es, C, t_proc)
 
 
-def tree(n_edge: int = 4, es_per_switch: int = 5, C: float = GBPS, t_proc: float = 0.0) -> Network:
-    """Two-level tree: one core switch, edge switches, end stations on edge switches."""
-    links, es = [], []
-    for i in range(n_edge):
-        sw = f"sw{i + 1}"
-        links.append(("sw0", sw))
-        for j in range(es_per_switch):
-            e = f"es{i + 1}_{j}"
-            es.append(e)
-            links.append((e, sw))
-    return Network(links, es, C, t_proc)
+def leaf_spine_small(C: float = GBPS, t_proc: float = 0.0) -> Network:
+    """2 spines x 4 leaves x 5 end stations: 20 end stations, 56 ports."""
+    return leaf_spine(2, 4, 5, C, t_proc)
+
+
+def leaf_spine_large(C: float = GBPS, t_proc: float = 0.0) -> Network:
+    """4 spines x 8 leaves x 5 end stations: 40 end stations, 144 ports."""
+    return leaf_spine(4, 8, 5, C, t_proc)
 
 
 def single_switch(n_es: int = 3, C: float = GBPS, t_proc: float = 0.0) -> Network:

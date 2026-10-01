@@ -38,7 +38,7 @@ samia.bouzefrane@lecnam.net}
 
 %Trang's work [Updated]: Abstract summarising problem, gate and measured results.
 \begin{abstract}
-Time-Sensitive Networking (TSN) guarantees worst-case latency only for a configuration that has been fixed and verified offline. When flows join a running network, fast optimisers (heuristics, ILP/SMT solvers, learned policies) can propose new configurations, but none of them certifies that every deadline still holds. We place a \emph{certified admission gate} between any such proposer and the network. The gate accepts a flow only together with a certificate: a per-hop witness of the network-calculus bound of every affected flow, which an independent checker of about fifty lines re-verifies without trusting the analysis code. We model 1\,Gbit/s switches with non-preemptive static priority and token-bucket flows, and bound delays with Total Flow Analysis. An incremental variant of the gate recomputes only the ports a request can affect and yields bit-identical bounds. On line and tree topologies with 1,000 seeded requests and 10 seeds, our bounds match the reference tool panco to a relative difference of $3.3\times10^{-16}$ per hop and $2.9\times10^{-6}$ end to end, no simulated delay exceeds its bound across 2,118 admitted flows, and the incremental gate is $1.9$--$2.0\times$ faster than full recomputation. All code, data and figures are reproducible from a public repository.
+Time-Sensitive Networking (TSN) guarantees worst-case latency only for a configuration that has been fixed and verified offline. When flows join a running network, fast optimisers (heuristics, ILP/SMT solvers, learned policies) can propose new configurations, but none of them certifies that every deadline still holds. We place a \emph{certified admission gate} between any such proposer and the network. The gate accepts a flow only together with a certificate: a per-hop witness of the network-calculus bound of every affected flow, which an independent checker of about fifty lines re-verifies without trusting the analysis code. We model 1\,Gbit/s switches with non-preemptive static priority and token-bucket flows, and bound delays with Total Flow Analysis. An incremental variant of the gate recomputes only the ports a request can affect and yields bit-identical bounds. On two two-tier TSN topologies (56 and 144 ports) with 1,000 seeded requests and 10 seeds, our bounds match the reference tool panco to a relative difference of $2.5\times10^{-16}$ per hop and $2.9\times10^{-6}$ end to end, no simulated delay exceeds its bound across 4,915 admitted flows, and the incremental gate is $2.0$--$2.2\times$ faster than full recomputation. All code, data and figures are reproducible from a public repository.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -58,7 +58,7 @@ Many tools can \emph{propose} a change quickly: greedy heuristics, ILP or SMT sc
 
 We answer it with an \emph{admission gate}, placed between any proposer and the network, in the spirit of a safety shield for learned controllers~\cite{alshiekh2018shield}. The gate receives one request at a time and returns a verdict together with a \emph{certificate}. A change is committed only if the certificate passes an independent checker. Fig.~\ref{fig:architecture} shows the setting and the pipeline. The guarantee is a safety property relative to the network model: it holds as far as the model of Section~\ref{sec:model} describes the real network.
 
-\textbf{Contributions.} (i) A gate $\mathrm{admit}(S, f) \to (\mathit{verdict}, \mathit{certificate})$ for non-preemptive static-priority TSN, whose certificates are checked by a small, separate checker with an explicit soundness argument (Section~\ref{sec:gate}). (ii) An incremental gate that recomputes only the ports a request can affect and provably returns the same bounds as full recomputation. (iii) A validation against the reference tool panco~\cite{bouillard2022panco}, a packet-level simulator and unit tests, with all results reproducible (Section~\ref{sec:results}). (iv) An explicit list of what the guarantee does not cover (Section~\ref{sec:limits}).
+\textbf{Contributions.} We develop (i)~a TSN topology with redundant core switches whose ECMP routes stay feed-forward, since each crosses one core switch at most (Section~\ref{sec:results}); (ii)~an admission gate that accepts a new flow only if every deadline still holds, and proves each decision with a certificate that a small, separate checker re-verifies (Section~\ref{sec:gate}); (iii)~an incremental gate that recomputes only the ports a request can affect and provably returns the same bounds as full recomputation; and (iv)~a validation against the reference tool panco~\cite{bouillard2022panco}, a packet-level simulator and unit tests, with all results reproducible (Section~\ref{sec:results}).
 
 \input{fig-architecture}
 
@@ -67,7 +67,7 @@ We answer it with an \emph{admission gate}, placed between any proposer and the 
 \section{Model}
 \label{sec:model}
 
-\textbf{Network.} The network is a set of switches and end stations joined by full-duplex links of rate $C = 1$\,Gbit/s. Each direction of a link is an output \emph{port}, served by the transmitting node. A switch adds a constant processing delay $t_{\mathit{proc}}$. Routing is fixed: each source--destination pair uses one shortest path, and end stations do not forward. When the network is built, we compute the dependency graph between ports induced by all possible routes and require it to be acyclic (\emph{feed-forward}); its topological order is reused for every flow set.
+\textbf{Network.} The network is a set of switches and end stations joined by full-duplex links of rate $C = 1$\,Gbit/s. Each direction of a link is an output \emph{port}, served by the transmitting node. A switch adds a constant processing delay $t_{\mathit{proc}}$. Routing is fixed: each source--destination pair uses one shortest path (ties broken by hashing the pair, as in ECMP), and end stations do not forward. When the network is built, we compute the dependency graph between ports induced by all possible routes and require it to be acyclic (\emph{feed-forward}); its topological order is reused for every flow set.
 
 \textbf{Flows.} A flow $f$ has a source, a destination, a token-bucket arrival curve $\alpha_f(t) = b_f + r_f t$ at its source, a maximum frame size $L_f \le b_f$, a priority class $k_f$ (0 is the highest) and an end-to-end deadline $D^{\max}_f$. Ports use non-preemptive static priority (NP-SP), FIFO within a class.
 
@@ -130,25 +130,25 @@ C0 is needed: omitting a flow from the certificate only lowers the aggregates of
 \section{Results}
 \label{sec:results}
 
-\textbf{Setup.} We use two feed-forward topologies with 48 ports each: a \emph{line} of 5 switches with 4 end stations per switch, and a \emph{tree} with one core switch and 4 edge switches with 5 end stations each; $C = 1$\,Gbit/s and $t_{\mathit{proc}} = 1\,\mu$s. Requests are drawn between random end-station pairs from two classes. Class~0 (control, probability 0.3) has 64--256\,B frames, periods of 0.25--1\,ms and deadlines of 0.1--0.5\,ms. Class~1 (stream) has 500--1500\,B frames, bursts of one or two frames, periods of 0.125--1\,ms and deadlines of 0.5--2\,ms. Each run submits 1,000 requests in sequence; we use 10 seeds per topology and run both gates on the same sequence. The code is single-threaded CPython 3.14.
+\textbf{Setup.} We use two-tier TSN topologies (Fig.~\ref{fig:architecture}a), every edge switch linked to every core switch and 5 end stations per edge switch: 2 core $\times$ 4 edge switches (\emph{small}, 56 ports) and 4 core $\times$ 8 edge (\emph{large}, 144 ports). ECMP spreads pairs evenly over the core switches; $C = 1$\,Gbit/s and $t_{\mathit{proc}} = 1\,\mu$s. Requests are drawn between random end-station pairs from two classes. Class~0 (control, probability 0.3) has 64--256\,B frames, periods of 0.25--1\,ms and deadlines of 0.1--0.5\,ms. Class~1 (stream) has 500--1500\,B frames, bursts of one or two frames, periods of 0.125--1\,ms and deadlines of 0.5--2\,ms. A greedy proposer submits 1,000 requests per run in arrival order; we use 10 seeds per topology and run both gates on the same sequence. The code is single-threaded CPython 3.14.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{panco_agreement.pdf}
-\caption{Bounds of our gate against panco~\cite{bouillard2022panco}, per hop (837 values) and end to end (210 values, TfaLP).}
+\caption{Bounds of our gate against panco~\cite{bouillard2022panco}, per hop (1,119 values) and end to end (242 values, TfaLP).}
 \label{fig:panco}
 \end{figure}
 
-\textbf{Agreement with panco.} We compare our analysis with panco~\cite{bouillard2022panco} on five scenarios: a hand-computed two-flow example and two seeds of 60 requests on each topology, with $t_{\mathit{proc}} = 0$. Per hop, panco's static-priority residual server gives the delay and output burst that we compare with~\eqref{eq:hop} and~\eqref{eq:burst}. End to end, panco builds one FIFO network per class from residual servers and solves TFA as a linear program, independently of our propagation code. The 290 hop delays and 547 output bursts agree to a relative difference of at most $3.3 \times 10^{-16}$, that is, to floating-point precision; the 210 end-to-end bounds agree to $2.9 \times 10^{-6}$, the precision at which lp\_solve prints its results (Fig.~\ref{fig:panco}).
+\textbf{Agreement with panco.} We compare our analysis with panco~\cite{bouillard2022panco} on five scenarios: a hand-computed two-flow example and two seeds of 60 requests on each topology, with $t_{\mathit{proc}} = 0$. Per hop, panco's static-priority residual server gives the delay and output burst that we compare with~\eqref{eq:hop} and~\eqref{eq:burst}. End to end, panco builds one FIFO network per class from residual servers and solves TFA as a linear program, independently of our propagation code. The 481 hop delays and 638 output bursts agree to a relative difference of at most $2.5 \times 10^{-16}$, that is, to floating-point precision; the 242 end-to-end bounds agree to $2.9 \times 10^{-6}$, the precision at which lp\_solve prints its results (Fig.~\ref{fig:panco}).
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{bound_tightness.pdf}
-\caption{Worst simulated delay against the bound for 2,118 admitted flows (10\,ms simulated, line and tree, 10 seeds). (a)~Per flow; (b)~CDF of observed/bound.}
+\caption{Worst simulated delay against the bound for 4,915 admitted flows (10\,ms simulated, both topologies, 10 seeds). (a)~Per flow; (b)~CDF of observed/bound.}
 \label{fig:sim}
 \end{figure}
 
-\textbf{Simulation.} A discrete-event, packet-level simulator replays every admitted set: each flow emits its burst at a random offset and then frames at rate $r_f$, and ports serve NP-SP queues frame by frame. Over 2,118 admitted flows, no observed delay exceeds its bound (Fig.~\ref{fig:sim}). The median ratio of observed delay to bound is 0.17 for control traffic and 0.11 for stream traffic, with maxima of 0.74 and 0.58. These ratios are a sanity check, not a measure of tightness: the simulator does not search for the worst-case alignment of bursts.
+\textbf{Simulation.} A discrete-event, packet-level simulator replays every admitted set: each flow emits its burst at a random offset and then frames at rate $r_f$, and ports serve NP-SP queues frame by frame. Over 4,915 admitted flows, no observed delay exceeds its bound (Fig.~\ref{fig:sim}). The median ratio of observed delay to bound is 0.19 for control traffic and 0.10 for stream traffic, with maxima of 0.71 and 0.43. These ratios are a sanity check, not a measure of tightness: the simulator does not search for the worst-case alignment of bursts.
 
 \begin{figure}[t]
 \centering
@@ -157,7 +157,7 @@ C0 is needed: omitting a flow from the certificate only lowers the aggregates of
 \label{fig:rate}
 \end{figure}
 
-\textbf{Admission rate.} Both networks accept every request up to about 50, then saturate (Fig.~\ref{fig:rate}). After 1,000 requests, $100 \pm 20$ flows are admitted on the line and $111 \pm 16$ on the tree, an overall rate of 10--11\,\%. Control traffic is accepted slightly more often, as its priority shields it from most interference.
+\textbf{Admission rate.} The small and large networks accept every request up to 50 and 200, then saturate (Fig.~\ref{fig:rate}) at $150 \pm 14$ and $342 \pm 22$ admitted flows out of 1,000. Control traffic is accepted slightly more often, as its priority shields it from most interference.
 
 \begin{figure}[t]
 \centering
@@ -174,15 +174,15 @@ C0 is needed: omitting a flow from the certificate only lowers the aggregates of
 \toprule
 Topology & Gate & Median & p95 & Speed-up \\
 \midrule
-Line & Full        & 1944 & 2745 & \\
-     & Incremental &  964 & 1587 & $2.02 \pm 0.13$ \\
-Tree & Full        & 2202 & 3718 & \\
-     & Incremental & 1186 & 1750 & $1.91 \pm 0.23$ \\
+Small & Full        & 3097 &  5809 & \\
+      & Incremental & 1617 &  3316 & $1.97 \pm 0.27$ \\
+Large & Full        & 7317 & 11710 & \\
+      & Incremental & 3331 &  5467 & $2.24 \pm 0.14$ \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\textbf{Run time.} Over all runs, the full and incremental gates return identical verdicts, and the final bounds of both are equal bit for bit. The incremental gate is $2.02\times$ faster on the line and $1.91\times$ on the tree over 1,000 requests (Table~\ref{tab:time}), and its cost per request grows more slowly with the number of admitted flows (Fig.~\ref{fig:time}b). The gain is modest because these networks are small: a request still re-evaluates a median of 19 of the 48 ports. A median decision takes about 1\,ms in Python.
+\textbf{Run time.} Over all runs, the full and incremental gates return identical verdicts, and the final bounds of both are equal bit for bit. The incremental gate is $1.97\times$ faster on the small topology and $2.24\times$ on the large one over 1,000 requests (Table~\ref{tab:time}), and its cost per request grows more slowly with the number of admitted flows (Fig.~\ref{fig:time}b). A request re-evaluates a median of 24 of 56 ports (small) but 49 of 144 (large), so the gain grows with size. A median decision takes 1.6--3.3\,ms in Python.
 
 \textbf{Tests.} Eighteen unit tests cover a hand-computed example (to $10^{-12}$), gate equality, the simulator and tampered certificates, rejected by C5 (halved delay) and C0 (omitted flow).
 
@@ -191,21 +191,21 @@ Tree & Full        & 2202 & 3718 & \\
 \section{Limitations}
 \label{sec:limits}
 
-\textbf{Model.} The guarantee is only as good as the model. We assume a single link rate, fixed shortest-path routing, feed-forward port dependencies and strict NP-SP. Credit-based and time-aware shapers, frame preemption, redundancy and clock effects are not modelled, and Ethernet overheads (preamble, inter-frame gap) must be folded into $L_f$, $b_f$ and $r_f$ by the operator. The processing delay is a constant upper bound.
+\textbf{Model.} The guarantee is only as good as the model. We assume a single link rate, fixed shortest-path (ECMP) routing, feed-forward port dependencies and strict NP-SP. Credit-based and time-aware shapers, frame preemption, redundancy and clock effects are not modelled, and Ethernet overheads (preamble, inter-frame gap) must be folded into $L_f$, $b_f$ and $r_f$ by the operator. The processing delay is a constant upper bound.
 
 \textbf{Analysis.} TFA bounds each port separately and propagates bursts hop by hop. It is sound but pessimistic compared with methods that exploit the pay-burst-only-once effect, such as PMOO or LP-based analyses~\cite{bondorf2014discodnc,bouillard2018dnc}. Pessimism lowers the admission rate; it never admits an unsafe flow.
 
 \textbf{Certification.} The soundness argument is a proof sketch on paper, not a mechanised proof, and the checker compares floating-point values with a relative tolerance of $10^{-9}$, which the argument does not account for. The checker is small but not itself verified; a formally verified checker, or exact rational arithmetic, would close both gaps. The certificate attests to the model, not to the configuration actually deployed on the switches.
 
-\textbf{Scope of the evaluation.} The gate only handles new flows; removing a flow and reconfiguring several flows at once are not implemented. The networks are small, saturate at about 100 flows, and only two classes are used, so the measured speed-up of the incremental gate may not carry over to larger networks. The simulator does not reach the worst case, and the run times are those of single-threaded Python on one machine. Finally, no proposer is connected yet: the gate has been tested on random requests only, not behind a heuristic or a learned policy.
+\textbf{Scope of the evaluation.} The gate only handles new flows; removing a flow and reconfiguring several flows at once are not implemented. Both networks are two-tier topologies of at most 144 ports with two classes; rings are not feed-forward and are out of reach of our TFA. The simulator does not reach the worst case, and the run times are those of single-threaded Python on one machine. Finally, the only proposer is greedy, not yet an ILP solver or a learned policy.
 
 % ---------------------------------------------------------------------------
 %Trang's work [Updated]: Conclusion and future work aligned with the thesis.
 \section{Conclusion}
 
-\textbf{Contribution.} This work makes online traffic allocation in TSN safe to automate. Each time a flow asks for a share of the network, the gate decides whether the ports on its path can still absorb its burst and rate without any admitted flow missing its deadline, and allocates the resources only if they can. Every allocation comes with a certificate that a fifty-line checker re-verifies (C0--C6), so a proposer, even a learned one, can never commit an unsafe allocation under the model. The incremental gate makes this decision in about 1\,ms with bounds bit-identical to full recomputation, and the bounds match panco to numerical precision and hold for all 2,118 simulated flows.
+\textbf{Contribution.} We develop (i)~a TSN topology with redundant core switches that ECMP routing keeps feed-forward, and (ii)~a certified admission gate that allocates a flow only if no admitted flow then misses its deadline, with a certificate that a fifty-line checker re-verifies (C0--C6), so no proposer, even a learned one, can commit an unsafe allocation under the model. We also develop (iii)~an incremental gate that decides in 1.6--3.3\,ms with bounds bit-identical to full recomputation, and (iv)~a validation in which the bounds match panco to numerical precision and hold for all 4,915 simulated flows.
 
-\textbf{Future directions.} Four directions follow. (i)~\emph{Capacity:} TFA is pessimistic and caps admission at about 100 flows on our topologies; tighter analyses that keep checkable certificates would let the same network carry more traffic. (ii)~\emph{Coverage:} credit-based and time-aware shapers and frame preemption must be modelled to allocate traffic in real TSN deployments. (iii)~\emph{Trust:} a mechanised soundness proof and an exact-arithmetic checker would remove the remaining gaps in the guarantee. (iv)~\emph{Allocation policy:} supporting flow removal and batched changes, then placing the gate as a shield behind heuristic, ILP and DRL proposers, will show how much admission capacity certification costs each of them.
+\textbf{Future directions.} Our work further extends in four directions. (i)~\emph{Capacity:} TFA is pessimistic and caps admission at 150--340 flows on our topologies; tighter analyses that keep checkable certificates would let the same network carry more traffic. (ii)~\emph{Coverage:} credit-based and time-aware shapers and frame preemption must be modelled to allocate traffic in real TSN deployments. (iii)~\emph{Trust:} a mechanised soundness proof and an exact-arithmetic checker would remove the remaining gaps in the guarantee. (iv)~\emph{Allocation policy:} flow removal, batched changes, and the gate behind ILP and DRL proposers, to measure what certification costs each.
 
 
 \bibliographystyle{IEEEtran}
