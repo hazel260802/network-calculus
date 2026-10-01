@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025/Debian) (preloaded format=pdflatex 2026.10.1)  2 OCT 2026 00:23
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025/Debian) (preloaded format=pdflatex 2026.10.1)  2 OCT 2026 00:38
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -854,44 +854,32 @@ LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 1
  (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
-<../../src/figures/panco_agreement.pdf, id=139, 561.7788pt x 258.59502pt>
+<../../src/figures/panco_agreement.pdf, id=143, 561.7788pt x 258.59502pt>
 File: ../../src/figures/panco_agreement.pdf Graphic file (type pdf)
 <use ../../src/figures/panco_agreement.pdf>
 Package pdftex.def Info: ../../src/figures/panco_agreement.pdf  used on input l
 ine 137.
 (pdftex.def)             Requested size: 250.05026pt x 115.104pt.
-<../../src/figures/bound_tightness.pdf, id=146, 561.78381pt x 244.14603pt>
+<../../src/figures/bound_tightness.pdf, id=150, 561.78381pt x 244.14603pt>
 File: ../../src/figures/bound_tightness.pdf Graphic file (type pdf)
 <use ../../src/figures/bound_tightness.pdf>
 Package pdftex.def Info: ../../src/figures/bound_tightness.pdf  used on input l
 ine 146.
 (pdftex.def)             Requested size: 250.05026pt x 108.66885pt.
-<../../src/figures/admission_rate.pdf, id=148, 488.27003pt x 229.80464pt>
+<../../src/figures/admission_rate.pdf, id=152, 488.27003pt x 229.80464pt>
 File: ../../src/figures/admission_rate.pdf Graphic file (type pdf)
 <use ../../src/figures/admission_rate.pdf>
 Package pdftex.def Info: ../../src/figures/admission_rate.pdf  used on input li
 ne 155.
 (pdftex.def)             Requested size: 250.05026pt x 117.6862pt.
-<../../src/figures/scalability.pdf, id=150, 561.42188pt x 277.42537pt>
+<../../src/figures/scalability.pdf, id=154, 561.42188pt x 277.42537pt>
 File: ../../src/figures/scalability.pdf Graphic file (type pdf)
 <use ../../src/figures/scalability.pdf>
 Package pdftex.def Info: ../../src/figures/scalability.pdf  used on input line 
 164.
 (pdftex.def)             Requested size: 250.05026pt x 123.56184pt.
  [3 <../../src/figures/panco_agreement.pdf> <../../src/figures/bound_tightness.
-pdf> <../../src/figures/admission_rate.pdf>] (./tsn-admission-gate.bbl
-Underfull \hbox (badness 1990) in paragraph at lines 50--54
-\OT1/ptm/m/it/8 Con-fer-ence on Ar-ti-fi-cial In-tel-li-gence\OT1/ptm/m/n/8 , v
-ol. 32, no. 1, 2018, doi:
- []
-
-
-Underfull \hbox (badness 1509) in paragraph at lines 68--72
-\OT1/ptm/m/it/8 ac-tions on In-ter-net of Things\OT1/ptm/m/n/8 , vol. 1, no. 4,
- p. e4, 2015, doi:
- []
-
-)
+pdf> <../../src/figures/admission_rate.pdf>] (./tsn-admission-gate.bbl)
 
 ** Conference Paper **
 Before submitting the final camera ready copy, remember to:
@@ -909,13 +897,13 @@ LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
  ***********
 Package rerunfilecheck Info: File `tsn-admission-gate.out' has not changed.
-(rerunfilecheck)             Checksum: 3A46DFD98D4F6D11ECE5A7F09E512782;648.
+(rerunfilecheck)             Checksum: 5A54F1BB51304BDAE5998EB36CA1655F;952.
  ) 
 Here is how much of TeX's memory you used:
- 23558 strings out of 469514
- 444994 string characters out of 5470072
- 892267 words of memory out of 5000000
- 51792 multiletter control sequences out of 15000+600000
+ 23562 strings out of 469514
+ 445068 string characters out of 5470072
+ 892714 words of memory out of 5000000
+ 51794 multiletter control sequences out of 15000+600000
  672951 words of font info for 128 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  84i,12n,94p,1414b,1025s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -941,10 +929,10 @@ ic/amsfonts/cm/cmti7.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier
 sr/share/texlive/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/share/texli
 ve/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/f
 onts/type1/urw/times/utmri8a.pfb>
-Output written on tsn-admission-gate.pdf (4 pages, 452858 bytes).
+Output written on tsn-admission-gate.pdf (4 pages, 454027 bytes).
 PDF statistics:
- 532 PDF objects out of 1000 (max. 8388607)
- 245 compressed objects within 3 object streams
- 34 named destinations out of 1000 (max. 500000)
+ 539 PDF objects out of 1000 (max. 8388607)
+ 252 compressed objects within 3 object streams
+ 36 named destinations out of 1000 (max. 500000)
  190 words of extra memory for PDF output out of 10000 (max. 10000000)
 

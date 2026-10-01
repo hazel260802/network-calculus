@@ -47,14 +47,14 @@ Time-Sensitive Networking, network calculus, admission control, certification, w
 
 % ---------------------------------------------------------------------------
 %Trang's work [Updated]: More contextual text before jumping into technology.
-\section{Problem}
+\section{Problem Formulation}
 \label{sec:problem}
 
-Factories, vehicles and aircraft increasingly replace dedicated fieldbuses with a single Ethernet network shared by control loops, sensors, video and best-effort traffic. For control traffic, a message that arrives late is not a slower service but a failure: a robot arm or a braking system acts on stale data. What these systems need from the network is therefore not a good average latency but a \emph{guaranteed worst case}, and that guarantee must survive while the system evolves, as machines, sensors and applications are added during operation.
+Factories, vehicles and aircraft increasingly replace dedicated fieldbuses with a single Ethernet network shared by control loops, sensors, video and best-effort traffic~\cite{lobello2019tsn,nasrallah2019ull}. For control traffic, a message that arrives late is not a slower service but a failure: a robot arm or a braking system acts on stale data. These systems need a \emph{guaranteed worst case}, not a good average latency, and it must survive as machines, sensors and applications are added during operation.
 
-Time-Sensitive Networking (TSN), a set of IEEE 802.1Q mechanisms~\cite{ieee8021q}, provides such bounded latency on switched Ethernet. Its guarantees rest on an analysis of the whole flow set: a worst-case delay bound computed with network calculus~\cite{cruz1991calculus,leboudec2001nc} or a schedule synthesised offline~\cite{xue2024tsn}. Real deployments, however, are not static. Flows are added while the network runs, and every change can increase the delay of flows already admitted, including flows on other paths whose traffic shares a port.
+Time-Sensitive Networking (TSN), a set of IEEE 802.1Q mechanisms~\cite{ieee8021q}, provides such bounded latency on switched Ethernet. Its guarantees rest on an analysis of the whole flow set: a worst-case delay bound computed with network calculus~\cite{cruz1991calculus,leboudec2001nc} or a schedule synthesised offline~\cite{xue2024tsn}. Yet flows are added while the network runs, and each change can delay flows already admitted, even on other paths that share a port.
 
-Many tools can \emph{propose} a change quickly: greedy heuristics, ILP or SMT schedulers~\cite{xue2024tsn}, and, increasingly, deep reinforcement learning policies. Their outputs are optimised, not proven. A learned policy in particular gives no worst-case guarantee, and even an exact solver is only as trustworthy as its encoding and implementation. For safety-critical traffic, the question at reconfiguration time is binary and must be answered with evidence: \emph{after this change, does every admitted flow still meet its deadline?}
+Many tools can \emph{propose} a change quickly: greedy heuristics, ILP or SMT schedulers~\cite{xue2024tsn}, and, increasingly, deep reinforcement learning policies. Their outputs are optimised, not proven. Even an exact solver is only as trustworthy as its encoding. For safety-critical traffic, the question at reconfiguration time is binary and must be answered with evidence: \emph{after this change, does every admitted flow still meet its deadline?}
 
 We answer it with an \emph{admission gate}, placed between any proposer and the network, in the spirit of a safety shield for learned controllers~\cite{alshiekh2018shield}. The gate receives one request at a time and returns a verdict together with a \emph{certificate}. A change is committed only if the certificate passes an independent checker. Fig.~\ref{fig:architecture} shows the setting and the pipeline. The guarantee is a safety property relative to the network model: it holds as far as the model of Section~\ref{sec:model} describes the real network.
 
@@ -64,7 +64,7 @@ We answer it with an \emph{admission gate}, placed between any proposer and the 
 
 % ---------------------------------------------------------------------------
 %Trang's work [Updated]: System model and the NP-SP per-hop, burst and end-to-end bounds (TFA).
-\section{Model}
+\section{System Model}
 \label{sec:model}
 
 \textbf{Network.} The network is a set of switches and end stations joined by full-duplex links of rate $C = 1$\,Gbit/s. Each direction of a link is an output \emph{port}, served by the transmitting node. A switch adds a constant processing delay $t_{\mathit{proc}}$. Routing is fixed: each source--destination pair uses one shortest path (ties broken by hashing the pair, as in ECMP), and end stations do not forward. When the network is built, we compute the dependency graph between ports induced by all possible routes and require it to be acyclic (\emph{feed-forward}); its topological order is reused for every flow set.
@@ -127,7 +127,7 @@ C0 is needed: omitting a flow from the certificate only lowers the aggregates of
 
 % ---------------------------------------------------------------------------
 %Trang's work [Updated]: Results from src/results/*.csv; figures rebuilt with src/experiments/plot_figures.py.
-\section{Results}
+\section{Experimental Setup and Results}
 \label{sec:results}
 
 \textbf{Setup.} We use two-tier TSN topologies (Fig.~\ref{fig:architecture}a), every edge switch linked to every core switch and 5 end stations per edge switch: 2 core $\times$ 4 edge switches (\emph{small}, 56 ports) and 4 core $\times$ 8 edge (\emph{large}, 144 ports). ECMP spreads pairs evenly over the core switches; $C = 1$\,Gbit/s and $t_{\mathit{proc}} = 1\,\mu$s. Requests are drawn between random end-station pairs from two classes. Class~0 (control, probability 0.3) has 64--256\,B frames, periods of 0.25--1\,ms and deadlines of 0.1--0.5\,ms. Class~1 (stream) has 500--1500\,B frames, bursts of one or two frames, periods of 0.125--1\,ms and deadlines of 0.5--2\,ms. A greedy proposer submits 1,000 requests per run in arrival order; we use 10 seeds per topology and run both gates on the same sequence. The code is single-threaded CPython 3.14.
@@ -188,7 +188,7 @@ Large & Full        & 7317 & 11710 & \\
 
 % ---------------------------------------------------------------------------
 %Trang's work [Updated]: Limitations of the model, the analysis, the certification and the evaluation.
-\section{Limitations}
+\section{Research Scope and Limits}
 \label{sec:limits}
 
 \textbf{Model.} The guarantee is only as good as the model. We assume a single link rate, fixed shortest-path (ECMP) routing, feed-forward port dependencies and strict NP-SP. Credit-based and time-aware shapers, frame preemption, redundancy and clock effects are not modelled, and Ethernet overheads (preamble, inter-frame gap) must be folded into $L_f$, $b_f$ and $r_f$ by the operator. The processing delay is a constant upper bound.
