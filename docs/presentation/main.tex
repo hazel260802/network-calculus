@@ -103,20 +103,20 @@ Between \textbf{any} proposer and the network, like a safety shield \cite{alshie
 \end{itemize}
 \column{0.42\textwidth}
 \centering
-\begin{tikzpicture}[font=\scriptsize, >=Latex]
-  \node[box, minimum width=2.6cm, fill=white] (prop) at (1.9, 3.0) {Greedy proposer\\(arrival order)};
-  \node[box, minimum width=2.6cm, fill=cReq!12] (gate) at (1.9, 1.85) {Admission gate\\TFA bounds};
-  \node[box, minimum width=2.6cm, fill=cLow!15] (chk) at (1.9, 0.75) {Checker C0--C6};
-  \node[box, minimum width=2.6cm, fill=white] (com) at (1.9, -0.25) {commit $S \cup \{f\}$};
-  \node[data, minimum width=0.8cm] (st) at (-0.2, 1.85) {$S$};
-  \node[data, minimum width=0.8cm] (db) at (4.1, 0.75) {flow\\DB};
-  \draw[->, thick] (prop) -- node[right, pos=0.45] {request $f$} (gate);
-  \draw[->, thick] (gate) -- node[right, pos=0.45] {certificate} (chk);
-  \draw[->, thick] (chk) -- node[right, pos=0.45] {pass} (com);
-  \draw[->] (st) -- (gate);
-  \draw[->] (db) -- (chk);
-  \draw[->, black!60] (com.west) -| (st.south);
-  \draw[->, dashed, cHigh] (gate.east) -- ++(0.55, 0) |- node[right, pos=0.25] {reject} (prop.east);
+\begin{tikzpicture}[font=\footnotesize, >=Latex]
+  \node[box, minimum width=2.8cm, minimum height=0.75cm, fill=white] (prop) at (1.9, 4.6) {Greedy proposer\\(arrival order)};
+  \node[box, minimum width=2.8cm, minimum height=0.75cm, fill=cReq!12] (gate) at (1.9, 3.05) {Admission gate\\TFA bounds};
+  \node[box, minimum width=2.8cm, minimum height=0.75cm, fill=cLow!15] (chk) at (1.9, 1.5) {Checker C0--C6};
+  \node[box, minimum width=2.8cm, minimum height=0.75cm, fill=white] (com) at (1.9, 0) {commit $S \cup \{f\}$};
+  \node[data, minimum width=0.8cm] (st) at (-0.45, 3.05) {$S$};
+  \node[data, minimum width=0.8cm] (db) at (4.25, 1.5) {flow\\DB};
+  \draw[->, very thick] (prop) -- node[right, pos=0.5] {request $f$} (gate);
+  \draw[->, very thick] (gate) -- node[right, pos=0.5] {certificate} (chk);
+  \draw[->, very thick] (chk) -- node[right, pos=0.5] {pass} (com);
+  \draw[->, thick] (st) -- (gate);
+  \draw[->, thick] (db) -- (chk);
+  \draw[->, thick, black!60] (com.west) -| (st.south);
+  \draw[->, thick, dashed, cHigh] (gate.east) -- ++(0.5, 0) |- node[right, pos=0.25] {reject} (prop.east);
 \end{tikzpicture}
 \end{columns}
 \end{frame}
