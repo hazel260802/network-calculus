@@ -1,0 +1,56 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{ieee8021q}
+\citation{cruz1991calculus,leboudec2001nc}
+\citation{xue2024tsn}
+\citation{xue2024tsn}
+\citation{alshiekh2018shield}
+\citation{bouillard2022panco}
+\@writefile{toc}{\contentsline {section}{\numberline {I}Problem}{1}{section.1}\protected@file@percent }
+\newlabel{sec:problem}{{I}{1}{Problem}{section.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {II}Model}{1}{section.2}\protected@file@percent }
+\newlabel{sec:model}{{II}{1}{Model}{section.2}{}}
+\citation{leboudec2001nc,bouillard2018dnc}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces System architecture. (a)~Admitted flows $f_1$ (class 0) and $f_2$ (class 1) and a new class-0 request $f$ share output port $p$. (b)~At $p$, frames are classified by priority into FIFO queues; the strict-priority (SP) selector serves class 0 first but cannot preempt a class-1 frame already in transmission, which is the $L_{lo}$ term of~\eqref  {eq:hop}. (c)~A proposed change is committed only if the gate's certificate passes the independent checker, which also reads the flow database (C0); a rejection returns the violated flows to the proposer.}}{2}{figure.1}\protected@file@percent }
+\newlabel{fig:architecture}{{1}{2}{System architecture. (a)~Admitted flows $f_1$ (class 0) and $f_2$ (class 1) and a new class-0 request $f$ share output port $p$. (b)~At $p$, frames are classified by priority into FIFO queues; the strict-priority (SP) selector serves class 0 first but cannot preempt a class-1 frame already in transmission, which is the $L_{lo}$ term of~\eqref {eq:hop}. (c)~A proposed change is committed only if the gate's certificate passes the independent checker, which also reads the flow database (C0); a rejection returns the violated flows to the proposer}{figure.1}{}}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {TSN topology}}}{2}{subfigure.1.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {NP-SP output port $p$}}}{2}{subfigure.1.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(c)}{\ignorespaces {Admission gate}}}{2}{subfigure.1.3}\protected@file@percent }
+\newlabel{eq:hop}{{2}{2}{Model}{equation.2}{}}
+\newlabel{eq:burst}{{3}{2}{Model}{equation.3}{}}
+\newlabel{eq:e2e}{{4}{2}{Model}{equation.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {III}The Admission Gate}{2}{section.3}\protected@file@percent }
+\newlabel{sec:gate}{{III}{2}{The Admission Gate}{section.3}{}}
+\citation{bouillard2022panco}
+\citation{bouillard2022panco}
+\citation{bouillard2022panco}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Bounds of our gate against panco~\cite  {bouillard2022panco}, per hop (837 values) and end to end (210 values, TfaLP).}}{3}{figure.2}\protected@file@percent }
+\newlabel{fig:panco}{{2}{3}{Bounds of our gate against panco~\cite {bouillard2022panco}, per hop (837 values) and end to end (210 values, TfaLP)}{figure.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {IV}Results}{3}{section.4}\protected@file@percent }
+\newlabel{sec:results}{{IV}{3}{Results}{section.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Worst simulated delay against the bound for 2,118 admitted flows (10\,ms simulated, line and tree, 10 seeds). (a)~Per flow; (b)~CDF of observed/bound.}}{3}{figure.3}\protected@file@percent }
+\newlabel{fig:sim}{{3}{3}{Worst simulated delay against the bound for 2,118 admitted flows (10\,ms simulated, line and tree, 10 seeds). (a)~Per flow; (b)~CDF of observed/bound}{figure.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Fraction of the first $N$ requests accepted, per class (mean $\pm $ std over 10 seeds).}}{3}{figure.4}\protected@file@percent }
+\newlabel{fig:rate}{{4}{3}{Fraction of the first $N$ requests accepted, per class (mean $\pm $ std over 10 seeds)}{figure.4}{}}
+\citation{bondorf2014discodnc,bouillard2018dnc}
+\bibstyle{IEEEtran}
+\bibdata{tsn-references}
+\bibcite{ieee8021q}{1}
+\bibcite{cruz1991calculus}{2}
+\bibcite{leboudec2001nc}{3}
+\bibcite{xue2024tsn}{4}
+\bibcite{alshiekh2018shield}{5}
+\bibcite{bouillard2022panco}{6}
+\bibcite{bouillard2018dnc}{7}
+\bibcite{bondorf2014discodnc}{8}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Run time of the full and incremental gates. (a)~Cumulative time over $N$ requests; (b)~median time per request against the number of admitted flows.}}{4}{figure.5}\protected@file@percent }
+\newlabel{fig:time}{{5}{4}{Run time of the full and incremental gates. (a)~Cumulative time over $N$ requests; (b)~median time per request against the number of admitted flows}{figure.5}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces Admission time per request ($\mu $s), 10 seeds $\times $ 1,000 requests.}}{4}{table.1}\protected@file@percent }
+\newlabel{tab:time}{{I}{4}{Admission time per request ($\mu $s), 10 seeds $\times $ 1,000 requests}{table.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {V}Limitations}{4}{section.5}\protected@file@percent }
+\newlabel{sec:limits}{{V}{4}{Limitations}{section.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {VI}Conclusion}{4}{section.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{References}{4}{section*.1}\protected@file@percent }
+\gdef \@abspage@last{4}
