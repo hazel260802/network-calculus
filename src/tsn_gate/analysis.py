@@ -26,7 +26,7 @@ class ClassBound:
 
 @dataclass(frozen=True)
 class PortResult:
-    classes: dict     # prio -> ClassBound
+    classes: dict     # prio to ClassBound
 
 
 def analyze_port(C: float, t_proc: float, entries) -> PortResult:

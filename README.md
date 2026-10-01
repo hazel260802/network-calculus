@@ -20,6 +20,17 @@ $$
 
 $B_H, R_H$: aggregate burst and rate of higher-priority flows; $L_{lo}$: largest lower-priority frame (non-preemptive blocking); $B_k, R_k$: aggregates of class $k$; $b'$: output burst; $D$: end-to-end bound over path $\mathcal{P}$.
 
+## Results
+
+On a line (5 switches) and a tree (1 core + 4 edge switches), each fed 1,000 seeded flow requests over 10 seeds, the gate's bounds match the reference tool panco [5] to a relative difference of $3.3 \times 10^{-16}$ per hop (837 values) and $2.9 \times 10^{-6}$ end to end (210 values; the residual comes from lp_solve printing 6 significant digits) (Fig. 1). In packet-level simulation, none of the 2,118 admitted flows exceeded its bound; the worst observed delay is a median of 17 % of the bound for control traffic and 11 % for stream traffic, a sanity check rather than a tightness measure, since the simulator does not force the worst case (Fig. 2). Both networks accept every request up to about 50, then saturate at 100 ± 20 (line) and 111 ± 16 (tree) admitted flows out of 1,000, with control traffic accepted slightly more often (Fig. 3). The incremental gate gives the same verdicts and bit-identical bounds as the full TFA while being 2.0× (line) and 1.9× (tree) faster, with a median admission time of 0.96 ms and 1.19 ms (Fig. 4; single-threaded Python, timings are machine-dependent).
+
+| | |
+|:---:|:---:|
+| ![Agreement with panco](src/figures/panco_agreement.png) | ![Bound tightness](src/figures/bound_tightness.png) |
+| **Fig. 1.** Our bounds vs. panco, per hop and end to end. | **Fig. 2.** Simulated worst delay vs. bound (2,118 flows). |
+| ![Admission rate](src/figures/admission_rate.png) | ![Scalability](src/figures/scalability.png) |
+| **Fig. 3.** Admission rate of the first $N$ requests, per class. | **Fig. 4.** Full vs. incremental gate: total time and cost per request. |
+
 ## Repository structure
 
 ```
@@ -35,14 +46,29 @@ $B_H, R_H$: aggregate burst and rate of higher-priority flows; $L_{lo}$: largest
 
 ## Reproduction
 
+Python 3.14.5 with pinned dependencies. All workloads and simulations are seeded, so verdicts, bounds and simulated delays are reproduced exactly; only the timing columns depend on the machine. The CSVs behind the figures above are included in `src/results/`.
+
 ```bash
 cd src
 pip install -r requirements.txt
-python -m pytest -q                        # tests
-python experiments/benchmark_gate.py       # -> results/*.csv
-python experiments/plot_figures.py         # -> figures/*.{png,pdf}
+python -m pytest -q                        # 18 tests
+python experiments/benchmark_gate.py       # -> results/requests.csv, results/simulation.csv (~2 min)
+python experiments/plot_figures.py         # all figures -> figures/*.{png,pdf}
+```
 
-# optional: panco cross-check 
+Each figure can be rebuilt on its own from these CSVs:
+
+| Figure | Command (from `src/`) | Data |
+|---|---|---|
+| Fig. 1 | `python experiments/plot_figures.py panco_agreement` | `results/panco_check_{hop,e2e}.csv` |
+| Fig. 2 | `python experiments/plot_figures.py bound_tightness` | `results/simulation.csv` |
+| Fig. 3 | `python experiments/plot_figures.py admission_rate` | `results/requests.csv` |
+| Fig. 4 | `python experiments/plot_figures.py scalability` | `results/requests.csv` |
+| — | `python experiments/plot_figures.py admission_latency` | `results/requests.csv` |
+
+To regenerate the panco data of Fig. 1 (the `e2e` mode needs `lp_solve`; on Windows, inside WSL):
+
+```bash
 git clone https://github.com/anne-bou/panco ../panco && git -C ../panco checkout f035ccc5
 PANCO_PATH=../panco python validation/panco_check.py --mode hop
 PANCO_PATH=../panco python validation/panco_check.py --mode e2e

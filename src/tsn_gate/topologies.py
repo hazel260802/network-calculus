@@ -5,7 +5,7 @@ from .model import GBPS, Network
 
 
 def line(n_switches: int = 5, es_per_switch: int = 4, C: float = GBPS, t_proc: float = 0.0) -> Network:
-    """Daisy chain sw0 - sw1 - ... with `es_per_switch` end stations on each switch."""
+    """Daisy chain sw with end stations on each switch."""
     sws = [f"sw{i}" for i in range(n_switches)]
     links = list(zip(sws[:-1], sws[1:]))
     es = []
@@ -18,7 +18,7 @@ def line(n_switches: int = 5, es_per_switch: int = 4, C: float = GBPS, t_proc: f
 
 
 def tree(n_edge: int = 4, es_per_switch: int = 5, C: float = GBPS, t_proc: float = 0.0) -> Network:
-    """Two-level tree: one core switch, `n_edge` edge switches, end stations on edge switches."""
+    """Two-level tree: one core switch, edge switches, end stations on edge switches."""
     links, es = [], []
     for i in range(n_edge):
         sw = f"sw{i + 1}"
