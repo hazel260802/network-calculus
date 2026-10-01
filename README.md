@@ -1,6 +1,6 @@
 # Certified Admission Control for TSN
 
-Preparatory work for the PhD *"Certified Dynamic Reconfiguration of Time-Sensitive Networks: Online Admission Control under Worst-Case Determinism Guarantees"* (LyRIDS, ECE × CEDRIC, Cnam) — [thesis theme](docs/projects/thesis%20theme.pdf).
+Preparatory work for the PhD *"Certified Dynamic Reconfiguration of Time-Sensitive Networks: Online Admission Control under Worst-Case Determinism Guarantees"* (LyRIDS, ECE × CEDRIC, Cnam) in the [thesis theme](docs/projects/thesis%20theme.pdf).
 
 ## Overview
 
@@ -41,30 +41,25 @@ On a line (5 switches) and a tree (1 core + 4 edge switches), each fed 1,000 see
 │   ├── experiments/     # benchmark_gate.py, plot_figures.py
 │   ├── results/         # raw CSVs
 │   └── figures/         # PNG/PDF
-└── docs/                # thesis offer, courses, math background
+└── docs/
+    ├── articles/        # mini article: tsn-admission-gate.tex/.pdf (IEEEtran), architecture figure, BibTeX
+    ├── presentation/    # Beamer slides: main.tex/.pdf, figures, BibTeX
+    ├── projects/        # thesis offer, prior PPO project
+    ├── courses/         # AI introduction, deep learning
+    └── math/            # linear algebra, probability
 ```
 
 ## Reproduction
 
-Python 3.14.5 with pinned dependencies. All workloads and simulations are seeded, so verdicts, bounds and simulated delays are reproduced exactly; only the timing columns depend on the machine. 
+All workloads and simulations are seeded, so verdicts, bounds and simulated delays are reproduced exactly; only the timing columns depend on the machine. 
 
 ```bash
 cd src
 pip install -r requirements.txt
-python -m pytest -q                        # 18 tests
-python experiments/benchmark_gate.py       # -> results/requests.csv, results/simulation.csv (~2 min)
-python experiments/plot_figures.py         # all figures -> figures/*.{png,pdf}
+python -m pytest -q                        
+python experiments/benchmark_gate.py       
+python experiments/plot_figures.py        
 ```
-
-Each figure can be rebuilt on its own from these CSVs:
-
-| Figure | Command (from `src/`) | Data |
-|---|---|---|
-| Fig. 1 | `python experiments/plot_figures.py panco_agreement` | `results/panco_check_{hop,e2e}.csv` |
-| Fig. 2 | `python experiments/plot_figures.py bound_tightness` | `results/simulation.csv` |
-| Fig. 3 | `python experiments/plot_figures.py admission_rate` | `results/requests.csv` |
-| Fig. 4 | `python experiments/plot_figures.py scalability` | `results/requests.csv` |
-| — | `python experiments/plot_figures.py admission_latency` | `results/requests.csv` |
 
 To regenerate the panco data of Fig. 1 (the `e2e` mode needs `lp_solve`; on Windows, inside WSL):
 
