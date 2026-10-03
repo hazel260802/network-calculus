@@ -8,10 +8,7 @@ def leaf_spine(n_spine: int = 2, n_leaf: int = 4, es_per_leaf: int = 5, C: float
                t_proc: float = 0.0) -> Network:
     """
     Two-tier leaf-spine (folded Clos): every leaf links to every spine, end
-    stations attach to leaves. Inter-leaf traffic goes leaf -> spine -> leaf over
-    one of n_spine equal-cost paths, chosen per (src, dst) pair by ECMP hashing.
-    Not a tree (redundant paths), yet feed-forward: every route climbs at most
-    once to a spine and then descends.
+    stations attach to leaves. 
     """
     spines = [f"sp{s}" for s in range(n_spine)]
     links, es = [], []

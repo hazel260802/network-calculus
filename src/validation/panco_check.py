@@ -45,6 +45,11 @@ from panco.descriptor.curves import RateLatency, TokenBucket  # noqa: E402
 from panco.descriptor.server import Server  # noqa: E402
 from panco.staticpriorities.spServer import SpServer  # noqa: E402
 
+from panco.fifo.tfaLP import TfaLP
+from panco.staticpriorities.spFlow import SpFlow
+from panco.staticpriorities.spNetwork import SpNetwork
+from panco.lpSolvePath import LPSOLVEPATH
+
 from tsn_gate import Flow, IncrementalGate  # noqa: E402
 from tsn_gate.topologies import leaf_spine_large, leaf_spine_small, single_switch  # noqa: E402
 from tsn_gate.workload import random_flows  # noqa: E402
@@ -74,7 +79,6 @@ def rel(a, b):
     return abs(a - b) / max(abs(a), abs(b), 1e-300)
 
 
-# ---------------------------------------------------------------------------
 def check_hop(name, net, g, rows):
     C = net.C / US                                     # bit/us
     for p, res in g.port_results.items():
@@ -101,10 +105,7 @@ def check_hop(name, net, g, rows):
                 rows.append((name, "out-burst", f"{f}@{p}", fl.prio, b_ours, b_panco,
                              rel(b_ours, b_panco)))
 
-
-# ---------------------------------------------------------------------------
 def lp_solve_available() -> bool:
-    from panco.lpSolvePath import LPSOLVEPATH
     if not LPSOLVEPATH:
         return False
     if LPSOLVEPATH[0] == "wsl":
@@ -114,9 +115,6 @@ def lp_solve_available() -> bool:
 
 
 def check_e2e(name, net, g, rows):
-    from panco.fifo.tfaLP import TfaLP
-    from panco.staticpriorities.spFlow import SpFlow
-    from panco.staticpriorities.spNetwork import SpNetwork
 
     ports = sorted({p for f in g.paths for p in g.paths[f]}, key=net.topo_index.__getitem__)
     idx = {p: j for j, p in enumerate(ports)}
@@ -135,7 +133,6 @@ def check_e2e(name, net, g, rows):
             rows.append((name, "e2e", str(f), k, d_ours, float(d_panco), rel(d_ours, d_panco)))
 
 
-# ---------------------------------------------------------------------------
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--mode", choices=["hop", "e2e"], default="hop")

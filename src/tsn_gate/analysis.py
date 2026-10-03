@@ -17,7 +17,7 @@ class ClassBound:
     L_lo: float
     B_k: float
     R_k: float
-    delay: float      # includes t_proc; INF if unstable
+    delay: float     
 
     @property
     def stable(self) -> bool:
@@ -30,7 +30,7 @@ class PortResult:
 
 
 def analyze_port(C: float, t_proc: float, entries) -> PortResult:
-    """Pure function. entries: iterable of (prio, b_in, r, L) for flows crossing the port."""
+    """Pure function with the entries are iterable for flows crossing the port."""
     by_prio = {}
     for prio, b, r, L in entries:
         by_prio.setdefault(prio, []).append((b, r, L))
@@ -55,13 +55,13 @@ def analyze_port(C: float, t_proc: float, entries) -> PortResult:
 @dataclass
 class Analysis:
     """Result of a TFA pass over a flow set."""
-    port_results: dict   # port -> PortResult
-    bursts: dict         # fid -> [b at hop 0, b at hop 1, ...] (input burst of each hop)
-    e2e: dict            # fid -> end-to-end delay bound
+    port_results: dict   # port result
+    bursts: dict         # input burst of each hop
+    e2e: dict            # end-to-end delay bound
 
 
 def full_analysis(net, flows: dict, paths: dict) -> Analysis:
-    """flows: fid -> Flow, paths: fid -> tuple of ports. Recomputes everything."""
+    """Recomputes everything."""
     members = {}
     for fid, path in paths.items():
         for i, p in enumerate(path):
@@ -82,7 +82,7 @@ def full_analysis(net, flows: dict, paths: dict) -> Analysis:
 
 
 def output_burst(b: float, r: float, d: float) -> float:
-    """Output arrival curve of a server with delay bound d: alpha(t + d) = (b + r d) + r t."""
+    """Output arrival curve of a server with delay bound."""
     return b + r * d if d < INF else INF
 
 

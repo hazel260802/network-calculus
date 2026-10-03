@@ -55,11 +55,9 @@ class Network:
     # ---- routing -------------------------------------------------------
     def route(self, src: str, dst: str) -> tuple:
         """
-        Path as a tuple of ports [(src, s1), (s1, s2), ..., (sk, dst)].
-
-        Shortest path; ties between equal-cost next hops (e.g. the spines of a
-        leaf-spine) are broken by a CRC32 hash of (src, dst), as in ECMP. The
-        route of a pair is therefore fixed and reproducible across runs.
+        Path as a tuple of ports with shortest path, ties between equal-cost 
+        next hops (e.g. the spines of a leaf-spine) are broken by a CRC32 hash 
+        of (src, dst), as in ECMP. The route of a pair is therefore fixed and reproducible across runs.
         """
         key = (src, dst)
         if key not in self._routes:
@@ -87,7 +85,6 @@ class Network:
     def ports(self) -> list:
         return sorted({(u, v) for u, v in self.links} | {(v, u) for u, v in self.links})
 
-    # ---- feed-forward check -------------------------------------------
     def _port_topological_order(self) -> dict:
         """
         Topological order of the port dependency graph induced by all routes.

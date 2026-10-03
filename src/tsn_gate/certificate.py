@@ -28,7 +28,7 @@ class HopWitness:
 class FlowWitness:
     flow: object          # Flow
     path: tuple
-    hops: tuple           # HopWitness per hop
+    hops: tuple           # Hop witness (per hop)
     e2e: float
 
 
@@ -37,10 +37,10 @@ class Certificate:
     verdict: bool
     flow_id: int
     state_before: str                  # digest of the admitted set before the request
-    state_after: str                   # digest after (== before when rejected)
-    witnesses: dict = field(default_factory=dict)   # fid -> FlowWitness (all, or only changed ones)
+    state_after: str                   # digest before when rejected
+    witnesses: dict = field(default_factory=dict)   # all, or only changed flows
     violations: list = field(default_factory=list)  # human-readable reasons when rejected
-    complete: bool = True              # False for an incremental (delta) certificate
+    complete: bool = True              # false for an incremental (delta) certificate
 
     def summary(self) -> str:
         v = "ACCEPT" if self.verdict else "REJECT"
@@ -78,9 +78,8 @@ def _ge(a: float, b: float) -> bool:
 
 
 def check_certificate(net, witnesses: dict, flows=None) -> tuple:
-    """Verify a COMPLETE acceptance witness set. Returns (ok, list of errors).
-
-    `flows` (fid -> Flow) is the operator's flow database. When given, the checker
+    """
+    Verify a COMPLETE acceptance witness set. When given, the checker
     also requires exactly one witness per admitted flow, carrying that flow's own
     parameters (C0). Without it, a certificate that silently omits a flow would
     still pass: removing a flow only makes the other aggregates over-estimates.

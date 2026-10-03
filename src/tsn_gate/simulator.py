@@ -9,7 +9,7 @@ from collections import deque
 
 
 def simulate(net, flows: dict, paths: dict, horizon: float, seed: int = 0) -> dict:
-    """Returns fid -> maximum observed end-to-end delay (s)."""
+    """Returns fid observed end-to-end delay."""
     rng = random.Random(seed)
     C, tp = net.C, net.t_proc
     events = []   # (time, seq, kind, payload)

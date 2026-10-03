@@ -30,7 +30,7 @@ class State:
 
 
 def _violations(flows, paths, port_results, e2e, fids) -> list:
-    """(fid, message) for the flows in `fids` that are unstable or miss their deadline."""
+    """ Message flows are unstable or miss their deadline."""
     out = []
     for f in sorted(fids):
         fl = flows[f]
@@ -48,10 +48,7 @@ def _violations(flows, paths, port_results, e2e, fids) -> list:
 
 
 def admit(state: State, flow: Flow):
-    """Functional API from the assignment: admit(state, flow) -> (verdict, certificate).
-
-    Does not mutate `state`. On acceptance, the new state is `state.with_flow(flow)`.
-    """
+    """ Functional API from the assignment. """
     flow.validate()
     if flow.id in state.flows:
         raise ValueError(f"duplicate flow id {flow.id}")
@@ -70,7 +67,7 @@ def admit(state: State, flow: Flow):
 
 
 class FullGate:
-    """Stateful wrapper around `admit`: commits accepted flows."""
+    """Stateful wrapper around commits with accepted flows."""
 
     def __init__(self, net: Network):
         self.state = State(net)
@@ -100,7 +97,7 @@ class IncrementalGate:
         self.bursts = {}         # fid -> list of input bursts per hop
         self.e2e = {}            # fid -> bound
         self.witnesses = {}      # fid -> FlowWitness (complete after each commit)
-        self.digest = 0          # XOR of flow hashes, same value as certificate.digest
+        self.digest = 0          # XOR of flow hashes
         self.last_ports_recomputed = 0
 
     def admit(self, flow: Flow):
@@ -176,7 +173,7 @@ class IncrementalGate:
 
 
 class _Overlay:
-    """Read-only dict view: `top` shadows `base`."""
+    """Read-only dict view."""
     __slots__ = ("base", "top")
 
     def __init__(self, base, top):
