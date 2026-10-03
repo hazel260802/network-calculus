@@ -36,11 +36,6 @@ import sys
 import tempfile
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT))
-if os.environ.get("PANCO_PATH"):
-    sys.path.insert(0, os.environ["PANCO_PATH"])
-
 from panco.descriptor.curves import RateLatency, TokenBucket  # noqa: E402
 from panco.descriptor.server import Server  # noqa: E402
 from panco.staticpriorities.spServer import SpServer  # noqa: E402
@@ -55,10 +50,13 @@ from tsn_gate.topologies import leaf_spine_large, leaf_spine_small, single_switc
 from tsn_gate.workload import random_flows  # noqa: E402
 
 US = 1e6   # seconds -> microseconds
-
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+if os.environ.get("PANCO_PATH"):
+    sys.path.insert(0, os.environ["PANCO_PATH"])
+    
 
 def scenarios():
-    """(name, network, admitted gate) with t_proc = 0."""
     out = []
     net = single_switch(3)
     g = IncrementalGate(net)

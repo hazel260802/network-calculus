@@ -10,18 +10,19 @@ TSN guarantees worst-case latency only for a configuration fixed and verified of
 
 ```
 ├── src/
-│   ├── tsn_gate/        # model, NP-SP analysis, full/incremental gates, certificate checker, simulator
-│   ├── tests/           # hand calculation, full = incremental, tampered certificates, simulation
-│   ├── validation/      # cross-check against panco
-│   ├── experiments/     # benchmark_gate.py, plot_figures.py
-│   ├── results/         # raw CSVs
-│   └── figures/         # PNG/PDF
+│   ├── tsn_gate/        # Model, NP-SP analysis, full/incremental gates, certificate checker, simulator
+│   ├── tests/           # Hand calculation, tampered certificates, simulation
+│   ├── validation/      # Cross-check against panco
+│   ├── experiments/     # Benchmark with figures
+│   ├── results/         # Raw CSVs
+│   └── figures/         # Format PNG/PDF
 └── docs/
-    ├── articles/        # mini article: tsn-admission-gate.tex/.pdf (IEEEtran), architecture figure, BibTeX
-    ├── presentation/    # Beamer slides: main.tex/.pdf, figures, BibTeX
-    ├── projects/        # thesis offer, prior PPO project
+    ├── articles/        # IEEE mini article, architecture figure
+    ├── presentation/    # Beamer slides, figures
+    ├── projects/        # Thesis offer, prior PPO project
     ├── courses/         # AI introduction, deep learning
-    └── math/            # linear algebra, probability
+    ├── reports/         # Technical report with code explanation
+    └── math/            # Linear algebra, probability
 ```
 
 ## Model
