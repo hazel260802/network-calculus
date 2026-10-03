@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025/Debian) (preloaded format=pdflatex 2026.10.1)  2 OCT 2026 00:54
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025/Debian) (preloaded format=pdflatex 2026.10.1)  3 OCT 2026 12:59
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -805,41 +805,41 @@ Package hyperref Info: Link coloring ON on input line 19.
 <ORCIDiD_icon64x64.png, id=60, 64.24pt x 64.24pt>
 File: ORCIDiD_icon64x64.png Graphic file (type png)
 <use ORCIDiD_icon64x64.png>
-Package pdftex.def Info: ORCIDiD_icon64x64.png  used on input line 38.
+Package pdftex.def Info: ORCIDiD_icon64x64.png  used on input line 44.
 (pdftex.def)             Requested size: 8.35149pt x 8.35149pt.
 File: ORCIDiD_icon64x64.png Graphic file (type png)
 <use ORCIDiD_icon64x64.png>
-Package pdftex.def Info: ORCIDiD_icon64x64.png  used on input line 38.
+Package pdftex.def Info: ORCIDiD_icon64x64.png  used on input line 44.
 (pdftex.def)             Requested size: 8.35149pt x 8.35149pt.
 File: ORCIDiD_icon64x64.png Graphic file (type png)
 <use ORCIDiD_icon64x64.png>
-Package pdftex.def Info: ORCIDiD_icon64x64.png  used on input line 38.
+Package pdftex.def Info: ORCIDiD_icon64x64.png  used on input line 44.
 (pdftex.def)             Requested size: 8.35149pt x 8.35149pt.
 File: ORCIDiD_icon64x64.png Graphic file (type png)
 <use ORCIDiD_icon64x64.png>
-Package pdftex.def Info: ORCIDiD_icon64x64.png  used on input line 38.
+Package pdftex.def Info: ORCIDiD_icon64x64.png  used on input line 44.
 (pdftex.def)             Requested size: 8.35149pt x 8.35149pt.
 File: ORCIDiD_icon64x64.png Graphic file (type png)
 <use ORCIDiD_icon64x64.png>
-Package pdftex.def Info: ORCIDiD_icon64x64.png  used on input line 38.
+Package pdftex.def Info: ORCIDiD_icon64x64.png  used on input line 44.
 (pdftex.def)             Requested size: 8.35149pt x 8.35149pt.
 File: ORCIDiD_icon64x64.png Graphic file (type png)
 <use ORCIDiD_icon64x64.png>
-Package pdftex.def Info: ORCIDiD_icon64x64.png  used on input line 38.
+Package pdftex.def Info: ORCIDiD_icon64x64.png  used on input line 44.
 (pdftex.def)             Requested size: 8.35149pt x 8.35149pt.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 41.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 47.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 41.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 47.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Underfull \hbox (badness 10000) in paragraph at lines 40--42
+Underfull \hbox (badness 10000) in paragraph at lines 46--48
 []\OT1/ptm/b/it/9 Abstract\OT1/ptm/b/n/9 ---Time-Sensitive Net-work-ing (TSN) g
 uar-an-tees
  []
@@ -850,7 +850,7 @@ uar-an-tees
 
  <./ORCIDiD_icon64x64.png>] [2]
 LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 1
-26.
+32.
  (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
@@ -858,25 +858,25 @@ File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 File: ../../src/figures/panco_agreement.pdf Graphic file (type pdf)
 <use ../../src/figures/panco_agreement.pdf>
 Package pdftex.def Info: ../../src/figures/panco_agreement.pdf  used on input l
-ine 137.
+ine 143.
 (pdftex.def)             Requested size: 250.05026pt x 115.104pt.
 <../../src/figures/bound_tightness.pdf, id=151, 561.78381pt x 244.14603pt>
 File: ../../src/figures/bound_tightness.pdf Graphic file (type pdf)
 <use ../../src/figures/bound_tightness.pdf>
 Package pdftex.def Info: ../../src/figures/bound_tightness.pdf  used on input l
-ine 146.
+ine 152.
 (pdftex.def)             Requested size: 250.05026pt x 108.66885pt.
 <../../src/figures/admission_rate.pdf, id=153, 488.27003pt x 229.80464pt>
 File: ../../src/figures/admission_rate.pdf Graphic file (type pdf)
 <use ../../src/figures/admission_rate.pdf>
 Package pdftex.def Info: ../../src/figures/admission_rate.pdf  used on input li
-ne 155.
+ne 161.
 (pdftex.def)             Requested size: 250.05026pt x 117.6862pt.
 <../../src/figures/scalability.pdf, id=155, 561.42188pt x 277.42537pt>
 File: ../../src/figures/scalability.pdf Graphic file (type pdf)
 <use ../../src/figures/scalability.pdf>
 Package pdftex.def Info: ../../src/figures/scalability.pdf  used on input line 
-164.
+170.
 (pdftex.def)             Requested size: 250.05026pt x 123.56184pt.
  [3 <../../src/figures/panco_agreement.pdf> <../../src/figures/bound_tightness.
 pdf> <../../src/figures/admission_rate.pdf>] (./tsn-admission-gate.bbl)
@@ -902,7 +902,7 @@ Package rerunfilecheck Info: File `tsn-admission-gate.out' has not changed.
 Here is how much of TeX's memory you used:
  23562 strings out of 469514
  445068 string characters out of 5470072
- 892882 words of memory out of 5000000
+ 893166 words of memory out of 5000000
  51794 multiletter control sequences out of 15000+600000
  672951 words of font info for 128 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
@@ -929,7 +929,7 @@ ic/amsfonts/cm/cmti7.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier
 sr/share/texlive/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/share/texli
 ve/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/f
 onts/type1/urw/times/utmri8a.pfb>
-Output written on tsn-admission-gate.pdf (4 pages, 454572 bytes).
+Output written on tsn-admission-gate.pdf (4 pages, 454648 bytes).
 PDF statistics:
  540 PDF objects out of 1000 (max. 8388607)
  253 compressed objects within 3 object streams
